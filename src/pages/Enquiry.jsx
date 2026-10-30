@@ -126,6 +126,11 @@ Sent through the website quotation form.
     <>
       <style>{`
         .pe-enquiry-page {
+          --orange: #ed762b;
+          --orange-dark: #d75c19;
+          --orange-light: #fff0e5;
+          --navy: #102b3a;
+
           background: #f4f7f8;
           color: #142e3b;
           font-family: Arial, Helvetica, sans-serif;
@@ -141,19 +146,50 @@ Sent through the website quotation form.
           margin: auto;
         }
 
+        /* HERO */
+
         .pe-enquiry-hero {
+          position: relative;
+          overflow: hidden;
           background:
-            radial-gradient(circle at 80% 40%, rgba(87, 174, 204, .2), transparent 35%),
-            #102b3a;
+            radial-gradient(
+              ellipse at 85% 40%,
+              rgba(237, 118, 43, .32),
+              transparent 38%
+            ),
+            linear-gradient(
+              115deg,
+              #101e29 0%,
+              #192c39 60%,
+              #352820 100%
+            );
           color: white;
           padding: 88px 0 85px;
+        }
+
+        .pe-enquiry-hero::after {
+          content: "";
+          position: absolute;
+          width: 350px;
+          height: 350px;
+          right: -130px;
+          top: -180px;
+          border-radius: 50%;
+          background: rgba(237, 118, 43, .22);
+          filter: blur(80px);
+          pointer-events: none;
+        }
+
+        .pe-enquiry-hero > .pe-enquiry-container {
+          position: relative;
+          z-index: 1;
         }
 
         .pe-enquiry-eyebrow {
           display: flex;
           align-items: center;
           gap: 12px;
-          color: #72c9e7;
+          color: var(--orange);
           font-size: 11px;
           font-weight: 800;
           letter-spacing: 2.3px;
@@ -164,7 +200,7 @@ Sent through the website quotation form.
           content: "";
           width: 28px;
           height: 2px;
-          background: #72c9e7;
+          background: var(--orange);
         }
 
         .pe-enquiry-hero h1 {
@@ -176,7 +212,7 @@ Sent through the website quotation form.
         }
 
         .pe-enquiry-hero h1 span {
-          color: #72c9e7;
+          color: var(--orange);
         }
 
         .pe-enquiry-hero p {
@@ -196,9 +232,11 @@ Sent through the website quotation form.
         }
 
         .pe-enquiry-breadcrumb a {
-          color: #72c9e7;
+          color: var(--orange);
           text-decoration: none;
         }
+
+        /* MAIN SECTION */
 
         .pe-enquiry-main {
           padding: 85px 0 100px;
@@ -210,6 +248,8 @@ Sent through the website quotation form.
           gap: 45px;
           align-items: start;
         }
+
+        /* SIDEBAR */
 
         .pe-enquiry-sidebar {
           background: #102b3a;
@@ -247,8 +287,8 @@ Sent through the website quotation form.
           flex-shrink: 0;
           display: grid;
           place-items: center;
-          background: rgba(114,201,231,.12);
-          color: #72c9e7;
+          background: rgba(237,118,43,.16);
+          color: var(--orange);
         }
 
         .pe-enquiry-contact-item span {
@@ -269,15 +309,21 @@ Sent through the website quotation form.
           overflow-wrap: anywhere;
         }
 
+        .pe-enquiry-contact-item a:hover {
+          color: var(--orange);
+        }
+
         .pe-enquiry-sidebar-note {
           background: rgba(255,255,255,.06);
-          border-left: 2px solid #72c9e7;
+          border-left: 2px solid var(--orange);
           padding: 17px;
           margin-top: 25px;
           color: #b6c8d0;
           font-size: 11px;
           line-height: 1.8;
         }
+
+        /* FORM AREA */
 
         .pe-enquiry-form-area {
           min-width: 0;
@@ -288,7 +334,7 @@ Sent through the website quotation form.
         }
 
         .pe-enquiry-label {
-          color: #1685aa;
+          color: var(--orange-dark);
           font-size: 10px;
           font-weight: 800;
           letter-spacing: 2px;
@@ -308,6 +354,8 @@ Sent through the website quotation form.
           line-height: 1.8;
           margin: 0;
         }
+
+        /* TABS */
 
         .pe-enquiry-tabs {
           display: grid;
@@ -335,14 +383,20 @@ Sent through the website quotation form.
 
         .pe-enquiry-tab.active {
           background: white;
-          border-color: #dce7eb;
+          border-color: #f1c3a3;
           color: #143444;
           box-shadow: 0 3px 12px rgba(20, 55, 70, .05);
         }
 
         .pe-enquiry-tab.active svg {
-          color: #1685aa;
+          color: var(--orange-dark);
         }
+
+        .pe-enquiry-tab:hover {
+          color: var(--orange-dark);
+        }
+
+        /* FORM */
 
         .pe-enquiry-form {
           background: white;
@@ -364,8 +418,8 @@ Sent through the website quotation form.
           height: 43px;
           display: grid;
           place-items: center;
-          background: #eaf5f9;
-          color: #1685aa;
+          background: var(--orange-light);
+          color: var(--orange-dark);
         }
 
         .pe-enquiry-form-title h3 {
@@ -381,7 +435,7 @@ Sent through the website quotation form.
         }
 
         .pe-enquiry-section-title {
-          color: #1685aa;
+          color: var(--orange-dark);
           font-size: 10px;
           font-weight: 800;
           letter-spacing: 1.6px;
@@ -445,9 +499,9 @@ Sent through the website quotation form.
         .pe-enquiry-field input:focus,
         .pe-enquiry-field select:focus,
         .pe-enquiry-field textarea:focus {
-          border-color: #1685aa;
+          border-color: var(--orange);
           background: white;
-          box-shadow: 0 0 0 3px rgba(22,133,170,.08);
+          box-shadow: 0 0 0 3px rgba(237,118,43,.11);
         }
 
         .pe-enquiry-field input::placeholder,
@@ -461,6 +515,8 @@ Sent through the website quotation form.
           line-height: 1.6;
         }
 
+        /* SUBMIT BUTTON */
+
         .pe-enquiry-submit {
           width: 100%;
           display: flex;
@@ -470,7 +526,7 @@ Sent through the website quotation form.
           padding: 17px 20px;
           margin-top: 27px;
           border: 0;
-          background: #102b3a;
+          background: var(--orange);
           color: white;
           font-size: 12px;
           font-weight: 800;
@@ -480,8 +536,9 @@ Sent through the website quotation form.
         }
 
         .pe-enquiry-submit:hover {
-          background: #1685aa;
+          background: var(--orange-dark);
           transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(215,92,25,.2);
         }
 
         .pe-enquiry-privacy {
@@ -491,6 +548,8 @@ Sent through the website quotation form.
           text-align: center;
           margin: 15px 0 0;
         }
+
+        /* SUCCESS MESSAGE */
 
         .pe-enquiry-success {
           display: flex;
@@ -510,12 +569,43 @@ Sent through the website quotation form.
           margin-top: 1px;
         }
 
+        /* BOTTOM CTA - ORANGE GRADIENT */
+
         .pe-enquiry-bottom {
-          background: #eaf0f3;
-          padding: 65px 0;
+          position: relative;
+          overflow: hidden;
+          padding: 75px 0;
+          background:
+            radial-gradient(
+              ellipse at 90% 50%,
+              rgba(237,118,43,.4) 0%,
+              rgba(237,118,43,.17) 30%,
+              transparent 62%
+            ),
+            linear-gradient(
+              115deg,
+              #0b202c 0%,
+              #172d3a 55%,
+              #3b2a25 100%
+            );
+        }
+
+        .pe-enquiry-bottom::before {
+          content: "";
+          position: absolute;
+          width: 320px;
+          height: 320px;
+          right: -100px;
+          top: -170px;
+          border-radius: 50%;
+          background: rgba(237,118,43,.23);
+          filter: blur(75px);
+          pointer-events: none;
         }
 
         .pe-enquiry-bottom-inner {
+          position: relative;
+          z-index: 1;
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -523,14 +613,14 @@ Sent through the website quotation form.
         }
 
         .pe-enquiry-bottom h2 {
-          color: #153342;
+          color: white;
           font-size: clamp(25px, 4vw, 36px);
           letter-spacing: -1px;
           margin: 0 0 10px;
         }
 
         .pe-enquiry-bottom p {
-          color: #71818a;
+          color: #b8c7ce;
           font-size: 12px;
           line-height: 1.8;
           margin: 0;
@@ -540,7 +630,7 @@ Sent through the website quotation form.
           display: inline-flex;
           align-items: center;
           gap: 10px;
-          background: #102b3a;
+          background: var(--orange);
           color: white;
           text-decoration: none;
           padding: 16px 21px;
@@ -551,8 +641,11 @@ Sent through the website quotation form.
         }
 
         .pe-enquiry-bottom-link:hover {
-          background: #1685aa;
+          background: var(--orange-dark);
+          transform: translateY(-2px);
         }
+
+        /* RESPONSIVE */
 
         @media(max-width: 900px) {
           .pe-enquiry-layout {
@@ -618,6 +711,14 @@ Sent through the website quotation form.
             flex-direction: column;
             font-size: 10px;
             padding: 13px 6px;
+          }
+        }
+
+        @media(prefers-reduced-motion: reduce) {
+          .pe-enquiry-page *,
+          .pe-enquiry-page *::before,
+          .pe-enquiry-page *::after {
+            transition: none !important;
           }
         }
       `}</style>

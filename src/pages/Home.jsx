@@ -5,47 +5,46 @@ import {
   ArrowRight,
   Factory,
   Settings,
+  Layers3,
   ShieldCheck,
   Clock3,
-  Building2,
-  CheckCircle2,
-  Phone,
-  Mail,
   Target,
-  Layers3,
-  MoveUpRight
+  Building2,
+  FlaskConical,
+  Cog,
+  HardHat,
+  CheckCircle2,
+  FileText,
+  Phone
 } from "lucide-react";
 
 function Home() {
   const services = [
     {
-      number: "01",
       icon: Factory,
       title: "Industrial Fabrication",
       description:
-        "Fabrication solutions designed around industrial project requirements and specifications."
+        "Fabrication built around industrial project requirements, specifications and quality expectations."
     },
     {
-      number: "02",
       icon: Settings,
       title: "Custom Fabrication",
       description:
-        "Project-focused fabrication work developed according to client needs and drawings."
+        "Project-focused work developed from your drawings and needs, from single items to repeat orders."
     },
     {
-      number: "03",
       icon: Layers3,
       title: "Engineering Support",
       description:
-        "Practical coordination and execution support throughout fabrication requirements."
+        "Practical coordination and execution support from first discussion to final delivery."
     }
   ];
 
   const industries = [
-    "Pharmaceuticals",
-    "Chemical Manufacturing",
-    "Industrial Manufacturing",
-    "Engineering & Infrastructure"
+    { icon: FlaskConical, name: "Pharmaceuticals" },
+    { icon: Factory, name: "Chemical Manufacturing" },
+    { icon: Cog, name: "Industrial Manufacturing" },
+    { icon: HardHat, name: "Engineering & Infrastructure" }
   ];
 
   const clients = [
@@ -58,654 +57,853 @@ function Home() {
   ];
 
   const highlights = [
+    { icon: Clock3, value: "18+ years", label: "In fabrication" },
+    { icon: ShieldCheck, value: "Quality-first", label: "Dependable execution" },
+    { icon: Target, value: "Made to order", label: "Built to your drawings" },
+    { icon: Building2, value: "B2B", label: "Industrial clients" }
+  ];
+
+  const steps = [
     {
-      icon: Clock3,
-      value: "18+",
-      label: "Years of Experience"
+      title: "Understand the requirement",
+      text: "We review the scope, drawings and specifications you share."
     },
     {
-      icon: ShieldCheck,
-      value: "Quality",
-      label: "Focused Execution"
+      title: "Plan the approach",
+      text: "We agree the fabrication approach with you before work begins."
     },
     {
-      icon: Target,
-      value: "Custom",
-      label: "Project Approach"
-    },
-    {
-      icon: Building2,
-      value: "B2B",
-      label: "Industrial Focus"
+      title: "Execute with care",
+      text: "We carry out the agreed work with attention to quality and coordination."
     }
   ];
 
   return (
     <>
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,500..800&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
         .pe-home {
-          background: #f5f7f8;
-          color: #14232d;
+          --steel-900: #0e2233;
+          --steel-800: #16344a;
+          --steel-600: #35566d;
+          --steel-300: #aebfcb;
+          --steel-100: #e6ebef;
+          --paper: #f5f7f8;
+          --white: #ffffff;
+          --ink: #14232d;
+          --muted: #566a77;
+          --weld: #e8590c;
+          --weld-dark: #c2410c;
+          --weld-soft: #fff1e8;
+          --head: 'Archivo', 'Arial Narrow', Arial, sans-serif;
+          --body: 'IBM Plex Sans', Arial, Helvetica, sans-serif;
+
+          background: var(--paper);
+          color: var(--ink);
+          font-family: var(--body);
+          font-size: 16px;
+          line-height: 1.65;
           overflow: hidden;
-          font-family: Arial, Helvetica, sans-serif;
         }
 
-        .pe-home * {
+        .pe-home *,
+        .pe-home *::before,
+        .pe-home *::after {
           box-sizing: border-box;
         }
 
+        .pe-home h1,
+        .pe-home h2,
+        .pe-home h3 {
+          font-family: var(--head);
+          margin: 0;
+        }
+
+        .pe-home p {
+          margin: 0;
+        }
+
         .pe-container {
-          width: min(1200px, calc(100% - 48px));
+          width: min(1180px, calc(100% - 48px));
           margin: 0 auto;
         }
 
-        .pe-eyebrow {
+        .pe-home a:focus-visible {
+          outline: 3px solid var(--weld);
+          outline-offset: 3px;
+        }
+
+        /* BUTTONS */
+
+        .pe-btn {
           display: inline-flex;
           align-items: center;
+          justify-content: center;
           gap: 10px;
-          color: #1685aa;
-          font-size: 11px;
-          font-weight: 800;
-          letter-spacing: 2.5px;
-          text-transform: uppercase;
+          padding: 15px 24px;
+          border-radius: 4px;
+          text-decoration: none;
+          font-weight: 600;
+          font-size: 15px;
+          transition:
+            background .25s ease,
+            color .25s ease,
+            border-color .25s ease,
+            transform .25s ease,
+            box-shadow .25s ease;
         }
 
-        .pe-eyebrow::before {
-          content: "";
-          width: 27px;
-          height: 2px;
-          background: #1685aa;
+        .pe-btn-primary {
+          background: var(--weld);
+          color: #fff;
+          border: 1px solid var(--weld);
+          box-shadow: 0 7px 20px rgba(232, 89, 12, .16);
         }
+
+        .pe-btn-primary:hover {
+          background: var(--weld-dark);
+          border-color: var(--weld-dark);
+          transform: translateY(-3px);
+          box-shadow: 0 12px 25px rgba(232, 89, 12, .24);
+        }
+
+        .pe-btn-ghost {
+          color: #fff;
+          border: 1px solid rgba(255,255,255,.4);
+        }
+
+        .pe-btn-ghost:hover {
+          background: rgba(255,255,255,.1);
+          border-color: #fff;
+          transform: translateY(-2px);
+        }
+
+        .pe-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          color: var(--weld-dark);
+          font-weight: 600;
+          text-decoration: none;
+          border-bottom: 2px solid currentColor;
+          padding-bottom: 2px;
+          transition: color .2s ease;
+        }
+
+        .pe-link:hover {
+          color: var(--steel-900);
+        }
+
+        /* HERO */
 
         .pe-hero {
-          min-height: 690px;
           background:
-            radial-gradient(ellipse at 82% 40%, rgba(39, 112, 142, .27), transparent 42%),
-            linear-gradient(115deg, #081923 0%, #102b3a 58%, #183b4d 100%);
-          color: #fff;
-          position: relative;
-          display: flex;
-          align-items: center;
-          isolation: isolate;
-        }
+            radial-gradient(
+              ellipse at 85% 35%,
+              rgba(232, 89, 12, .17) 0%,
+              transparent 38%
+            ),
+            repeating-linear-gradient(
+              90deg,
+              rgba(255,255,255,.025) 0 1px,
+              transparent 1px 64px
+            ),
+            linear-gradient(
+              160deg,
+              var(--steel-900) 0%,
+              var(--steel-800) 100%
+            );
 
-        .pe-hero::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          z-index: -1;
-          opacity: .13;
-          background-image:
-            linear-gradient(rgba(255,255,255,.13) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,.13) 1px, transparent 1px);
-          background-size: 58px 58px;
-          mask-image: linear-gradient(to right, transparent, black);
+          color: #fff;
+          padding: 96px 0 0;
+          position: relative;
+          isolation: isolate;
         }
 
         .pe-hero::after {
           content: "";
           position: absolute;
-          width: 480px;
-          height: 480px;
-          border: 1px solid rgba(117, 191, 218, .18);
-          border-radius: 50%;
-          right: 4%;
-          top: 50%;
-          transform: translateY(-50%);
-          box-shadow:
-            0 0 0 55px rgba(117, 191, 218, .035),
-            0 0 0 110px rgba(117, 191, 218, .025);
-          z-index: -1;
+          left: 0;
+          bottom: 0;
+          height: 5px;
+          width: 100%;
+          background: linear-gradient(
+            90deg,
+            var(--weld) 0 220px,
+            rgba(232,89,12,.15) 220px,
+            transparent 70%
+          );
+          transform-origin: left;
+          animation: pe-line-in 1.2s .3s ease both;
         }
 
-        .pe-hero-content {
-          max-width: 780px;
-          padding: 100px 0 110px;
-          position: relative;
-          z-index: 1;
+        .pe-hero-grid {
+          display: grid;
+          grid-template-columns: 1.25fr .75fr;
+          gap: 64px;
+          align-items: center;
+          padding-bottom: 96px;
         }
 
-        .pe-hero-label {
+        .pe-hero-tag {
           display: inline-flex;
           align-items: center;
           gap: 10px;
-          border: 1px solid rgba(153, 207, 227, .3);
-          background: rgba(255,255,255,.055);
-          border-radius: 50px;
-          padding: 10px 16px;
-          color: #c2dce7;
-          font-size: 11px;
-          letter-spacing: 1.7px;
-          text-transform: uppercase;
-          margin-bottom: 30px;
+          padding: 7px 14px;
+          border: 1px solid rgba(255,255,255,.22);
+          border-radius: 100px;
+          color: #d5e0e6;
+          font-size: 13px;
+          letter-spacing: .3px;
+          margin-bottom: 26px;
+          background: rgba(255,255,255,.045);
+          animation: pe-fade-up .7s .1s ease both;
         }
 
-        .pe-hero-label span {
+        .pe-hero-tag::before {
+          content: "";
           width: 7px;
           height: 7px;
-          background: #5bc1e5;
           border-radius: 50%;
-          box-shadow: 0 0 12px #5bc1e5;
+          background: var(--weld);
+          box-shadow: 0 0 12px rgba(232,89,12,.8);
         }
 
         .pe-hero h1 {
-          font-size: clamp(43px, 6.3vw, 78px);
+          font-size: clamp(40px, 5.6vw, 70px);
+          font-weight: 800;
           line-height: 1.04;
-          letter-spacing: -3.5px;
-          font-weight: 800;
-          max-width: 850px;
-          margin: 0;
+          letter-spacing: -1.5px;
+          font-stretch: 90%;
+          animation: pe-fade-up .8s .2s ease both;
         }
 
-        .pe-hero h1 em {
-          color: #6fc5e4;
-          font-style: normal;
+        .pe-hero h1 span {
+          display: block;
+          color: var(--steel-300);
+          font-weight: 600;
         }
 
-        .pe-hero-description {
-          max-width: 590px;
-          color: #b9cbd4;
-          font-size: 16px;
-          line-height: 1.9;
-          margin: 27px 0 34px;
+        .pe-hero-text {
+          max-width: 540px;
+          color: #c6d4dd;
+          margin: 24px 0 34px !important;
+          font-size: 17px;
+          animation: pe-fade-up .8s .35s ease both;
         }
 
-        .pe-hero-actions {
+        .pe-actions {
           display: flex;
-          align-items: center;
           flex-wrap: wrap;
-          gap: 15px;
-        }
-
-        .pe-btn-primary,
-        .pe-btn-secondary {
-          display: inline-flex;
-          justify-content: center;
-          align-items: center;
-          gap: 13px;
-          text-decoration: none;
-          padding: 16px 22px;
-          border-radius: 3px;
-          font-size: 12px;
-          font-weight: 800;
-          letter-spacing: .7px;
-          transition: .25s ease;
-        }
-
-        .pe-btn-primary {
-          color: #08202d;
-          background: #72c9e7;
-          border: 1px solid #72c9e7;
-        }
-
-        .pe-btn-primary:hover {
-          background: #fff;
-          border-color: #fff;
-          transform: translateY(-3px);
-        }
-
-        .pe-btn-secondary {
-          color: #fff;
-          border: 1px solid rgba(255,255,255,.35);
-        }
-
-        .pe-btn-secondary:hover {
-          border-color: #72c9e7;
-          color: #72c9e7;
-          transform: translateY(-3px);
-        }
-
-        .pe-hero-note {
-          margin-top: 58px;
-          display: flex;
-          align-items: center;
           gap: 14px;
-          color: #9fb6c1;
-          font-size: 12px;
-          letter-spacing: .4px;
+          animation: pe-fade-up .8s .45s ease both;
         }
 
-        .pe-hero-note strong {
-          color: #fff;
+        .pe-brief {
+          background: var(--white);
+          color: var(--ink);
+          border-radius: 6px;
+          padding: 30px;
+          border-top: 5px solid var(--weld);
+          box-shadow: 0 30px 60px rgba(0,0,0,.3);
+          animation: pe-card-in .9s .35s ease both;
+          position: relative;
+        }
+
+        .pe-brief::after {
+          content: "";
+          position: absolute;
+          width: 120px;
+          height: 120px;
+          right: -20px;
+          top: -25px;
+          border-radius: 50%;
+          background: rgba(232,89,12,.07);
+          filter: blur(35px);
+          pointer-events: none;
+        }
+
+        .pe-brief h2 {
+          font-size: 22px;
+          font-weight: 700;
+          margin-bottom: 6px;
+          position: relative;
+        }
+
+        .pe-brief > p {
+          color: var(--muted);
+          font-size: 14px;
+          margin-bottom: 20px;
+        }
+
+        .pe-brief ul {
+          list-style: none;
+          margin: 0 0 24px;
+          padding: 0;
+          display: grid;
+          gap: 12px;
+        }
+
+        .pe-brief li {
+          display: flex;
+          gap: 10px;
           font-size: 15px;
         }
 
-        .pe-hero-note-line {
-          width: 40px;
-          height: 1px;
-          background: #6fc5e4;
+        .pe-brief li svg {
+          color: var(--weld);
+          flex-shrink: 0;
+          margin-top: 3px;
         }
 
-        .pe-stats {
-          background: #fff;
-          border-bottom: 1px solid #e5ebee;
+        .pe-brief .pe-btn {
+          width: 100%;
         }
 
-        .pe-stats-grid {
+        /* TRUST BAR */
+
+        .pe-trust {
+          background: var(--white);
+          border-bottom: 1px solid var(--steel-100);
+        }
+
+        .pe-trust-grid {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
         }
 
-        .pe-stat {
-          padding: 30px 22px;
-          border-right: 1px solid #e7edef;
+        .pe-trust-item {
           display: flex;
           align-items: center;
-          gap: 16px;
+          gap: 14px;
+          padding: 28px 20px;
+          border-right: 1px solid var(--steel-100);
+          transition: background .25s ease;
         }
 
-        .pe-stat:first-child {
-          border-left: 1px solid #e7edef;
+        .pe-trust-item:hover {
+          background: #fffaf6;
         }
 
-        .pe-stat-icon {
-          width: 43px;
-          height: 43px;
+        .pe-trust-item:first-child {
+          padding-left: 0;
+        }
+
+        .pe-trust-item:last-child {
+          border-right: 0;
+        }
+
+        .pe-trust-icon {
+          color: var(--weld);
           flex-shrink: 0;
-          display: grid;
-          place-items: center;
-          color: #1685aa;
-          background: #eaf5f9;
+          transition: transform .25s ease;
         }
 
-        .pe-stat-value {
-          font-size: 19px;
-          font-weight: 800;
-          color: #122c3b;
+        .pe-trust-item:hover .pe-trust-icon {
+          transform: translateY(-4px);
         }
 
-        .pe-stat-label {
-          font-size: 11px;
-          color: #71818b;
-          margin-top: 5px;
+        .pe-trust-item strong {
+          display: block;
+          font-family: var(--head);
+          font-size: 18px;
+          color: var(--steel-900);
+          line-height: 1.2;
         }
+
+        .pe-trust-item span {
+          font-size: 13px;
+          color: var(--muted);
+        }
+
+        /* COMMON SECTIONS */
 
         .pe-section {
-          padding: 105px 0;
+          padding: 96px 0;
         }
 
-        .pe-section-heading {
-          max-width: 700px;
+        .pe-head {
+          max-width: 640px;
           margin-bottom: 48px;
         }
 
-        .pe-section-heading h2 {
-          color: #122c3b;
-          font-size: clamp(32px, 4vw, 49px);
-          letter-spacing: -1.8px;
-          line-height: 1.15;
-          margin: 18px 0;
+        .pe-head h2,
+        .pe-about h2 {
+          font-size: clamp(30px, 3.8vw, 44px);
+          font-weight: 700;
+          line-height: 1.12;
+          letter-spacing: -.8px;
+          color: var(--steel-900);
         }
 
-        .pe-section-heading p {
-          color: #687b86;
-          font-size: 14px;
-          line-height: 1.9;
-          max-width: 590px;
-          margin: 0;
+        .pe-head p {
+          color: var(--muted);
+          margin-top: 14px;
         }
 
-        .pe-about-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          align-items: center;
-          gap: 75px;
-        }
-
-        .pe-about-visual {
-          min-height: 430px;
-          background:
-            linear-gradient(145deg, rgba(8,25,35,.2), rgba(8,25,35,.88)),
-            repeating-linear-gradient(
-              135deg,
-              #274653 0px,
-              #274653 20px,
-              #1d3946 20px,
-              #1d3946 40px
-            );
-          position: relative;
-          overflow: hidden;
-          display: flex;
-          align-items: flex-end;
-          padding: 35px;
-        }
-
-        .pe-about-visual::before {
-          content: "";
-          position: absolute;
-          width: 280px;
-          height: 280px;
-          border: 1px solid rgba(255,255,255,.25);
-          border-radius: 50%;
-          top: 55px;
-          left: 50%;
-          transform: translateX(-50%);
-          box-shadow: 0 0 0 35px rgba(255,255,255,.04),
-                      0 0 0 70px rgba(255,255,255,.025);
-        }
-
-        .pe-about-visual-content {
-          position: relative;
-          z-index: 1;
-          color: #fff;
-        }
-
-        .pe-about-visual-content strong {
-          display: block;
-          font-size: 66px;
-          line-height: 1;
-          letter-spacing: -3px;
-        }
-
-        .pe-about-visual-content span {
-          display: block;
-          margin-top: 12px;
-          color: #b9d3df;
-          font-size: 12px;
-          letter-spacing: 2px;
-          text-transform: uppercase;
-        }
-
-        .pe-about-copy h2 {
-          color: #122c3b;
-          font-size: clamp(33px, 4vw, 48px);
-          line-height: 1.15;
-          letter-spacing: -1.8px;
-          margin: 18px 0;
-        }
-
-        .pe-about-copy > p {
-          color: #6c7d87;
-          font-size: 14px;
-          line-height: 1.95;
-        }
-
-        .pe-check-list {
-          display: grid;
-          gap: 15px;
-          margin: 28px 0 32px;
-        }
-
-        .pe-check-item {
-          display: flex;
-          align-items: flex-start;
-          gap: 12px;
-          color: #304651;
-          font-size: 13px;
-          line-height: 1.6;
-        }
-
-        .pe-check-item svg {
-          color: #1685aa;
-          flex-shrink: 0;
-          margin-top: 1px;
-        }
-
-        .pe-text-link {
-          display: inline-flex;
-          align-items: center;
-          gap: 12px;
-          color: #147da1;
-          text-decoration: none;
-          font-size: 12px;
-          font-weight: 800;
-          letter-spacing: .7px;
-          border-bottom: 1px solid #b5d9e5;
-          padding-bottom: 9px;
-        }
-
-        .pe-services-section {
-          background: #eaf0f3;
-        }
-
-        .pe-heading-row {
+        .pe-head-row {
           display: flex;
           justify-content: space-between;
           align-items: flex-end;
           gap: 30px;
         }
 
-        .pe-heading-row .pe-section-heading {
-          margin-bottom: 48px;
-        }
+        /* ABOUT */
 
-        .pe-services-grid {
+        .pe-about {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 18px;
+          grid-template-columns: .9fr 1.1fr;
+          gap: 72px;
+          align-items: center;
         }
 
-        .pe-service-card {
-          background: #fff;
-          padding: 34px 30px;
-          min-height: 280px;
-          border: 1px solid #e2e9ec;
-          transition: .3s ease;
+        .pe-about-visual {
+          min-height: 440px;
+          border-radius: 6px;
+          padding: 32px;
+          display: flex;
+          align-items: flex-end;
+          color: #fff;
           position: relative;
+          overflow: hidden;
+          background:
+            radial-gradient(
+              circle at 85% 15%,
+              rgba(232,89,12,.3),
+              transparent 35%
+            ),
+            linear-gradient(
+              180deg,
+              transparent 35%,
+              rgba(14,34,51,.92)
+            ),
+            repeating-linear-gradient(
+              135deg,
+              #2b4a5f 0 18px,
+              #244257 18px 36px
+            );
+          border-bottom: 6px solid var(--weld);
+          box-shadow: 0 18px 40px rgba(14,34,51,.12);
+          transition: transform .35s ease, box-shadow .35s ease;
         }
 
-        .pe-service-card:hover {
-          transform: translateY(-7px);
-          border-color: #80c6df;
-          box-shadow: 0 20px 45px rgba(24, 59, 77, .08);
+        .pe-about-visual:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 25px 50px rgba(14,34,51,.17);
         }
 
-        .pe-service-number {
-          color: #a6b7bf;
-          font-size: 11px;
-          letter-spacing: 2px;
+        .pe-about-visual strong {
+          display: block;
+          font-family: var(--head);
+          font-size: 84px;
+          line-height: 1;
           font-weight: 800;
+          color: #fff;
+        }
+
+        .pe-about-visual span {
+          color: #e7b69a;
+          font-weight: 500;
+        }
+
+        .pe-about p {
+          color: var(--muted);
+          margin-top: 18px;
+        }
+
+        .pe-checks {
+          list-style: none;
+          padding: 0;
+          margin: 24px 0 30px;
+          display: grid;
+          gap: 12px;
+        }
+
+        .pe-checks li {
+          display: flex;
+          gap: 10px;
+          font-weight: 500;
+        }
+
+        .pe-checks svg {
+          color: var(--weld);
+          flex-shrink: 0;
+          margin-top: 3px;
+        }
+
+        /* SERVICES */
+
+        .pe-services {
+          background: var(--white);
+        }
+
+        .pe-service-list {
+          border-top: 2px solid var(--steel-900);
+        }
+
+        .pe-service {
+          display: grid;
+          grid-template-columns: 64px 280px 1fr;
+          gap: 28px;
+          align-items: center;
+          padding: 30px 0;
+          border-bottom: 1px solid var(--steel-100);
+          transition: padding .25s ease, background .25s ease;
+        }
+
+        .pe-service:hover {
+          padding-left: 12px;
+          background: linear-gradient(
+            90deg,
+            rgba(255,241,232,.65),
+            transparent 75%
+          );
         }
 
         .pe-service-icon {
-          width: 52px;
-          height: 52px;
+          width: 56px;
+          height: 56px;
           display: grid;
           place-items: center;
-          background: #eaf5f9;
-          color: #1685aa;
-          margin: 27px 0 23px;
+          background: var(--weld-soft);
+          color: var(--weld-dark);
+          border-radius: 5px;
+          transition:
+            background .25s ease,
+            color .25s ease,
+            transform .25s ease;
         }
 
-        .pe-service-card h3 {
-          color: #173442;
-          font-size: 19px;
-          margin: 0 0 12px;
-          letter-spacing: -.4px;
+        .pe-service:hover .pe-service-icon {
+          background: var(--weld);
+          color: #fff;
+          transform: rotate(-4deg) scale(1.05);
         }
 
-        .pe-service-card p {
-          color: #74848d;
-          font-size: 12px;
-          line-height: 1.85;
-          margin: 0;
+        .pe-service h3 {
+          font-size: 22px;
+          font-weight: 700;
+          color: var(--steel-900);
         }
+
+        .pe-service p {
+          color: var(--muted);
+        }
+
+        /* INDUSTRIES */
 
         .pe-industries {
-          background: #102b3a;
+          background:
+            radial-gradient(
+              circle at 90% 10%,
+              rgba(232,89,12,.13),
+              transparent 30%
+            ),
+            var(--steel-900);
           color: #fff;
         }
 
-        .pe-industries .pe-section-heading h2 {
+        .pe-industries .pe-head h2 {
           color: #fff;
         }
 
-        .pe-industries .pe-section-heading p {
-          color: #afc2cc;
+        .pe-industries .pe-head p {
+          color: var(--steel-300);
         }
 
-        .pe-industry-grid {
+        .pe-ind-grid {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
-          border-top: 1px solid rgba(255,255,255,.15);
-          border-left: 1px solid rgba(255,255,255,.15);
+          gap: 16px;
         }
 
-        .pe-industry-item {
-          min-height: 155px;
-          padding: 27px;
-          border-right: 1px solid rgba(255,255,255,.15);
-          border-bottom: 1px solid rgba(255,255,255,.15);
+        .pe-ind {
+          background: rgba(255,255,255,.05);
+          border: 1px solid rgba(255,255,255,.12);
+          border-radius: 6px;
+          padding: 26px;
+          min-height: 170px;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          transition: .25s;
+          transition:
+            transform .3s ease,
+            background .3s ease,
+            border-color .3s ease;
         }
 
-        .pe-industry-item:hover {
-          background: rgba(255,255,255,.06);
+        .pe-ind:hover {
+          background: rgba(255,255,255,.09);
+          border-color: var(--weld);
+          transform: translateY(-5px);
         }
 
-        .pe-industry-item svg {
-          color: #72c9e7;
+        .pe-ind svg {
+          color: #f18a50;
+          transition: transform .3s ease;
         }
 
-        .pe-industry-item span {
-          color: #e3edf1;
-          font-size: 13px;
-          font-weight: 700;
-          line-height: 1.5;
+        .pe-ind:hover svg {
+          transform: scale(1.12);
         }
 
-        .pe-client-section {
-          background: #fff;
-          text-align: center;
+        .pe-ind span {
+          font-family: var(--head);
+          font-size: 19px;
+          font-weight: 600;
+          line-height: 1.25;
         }
 
-        .pe-client-section .pe-section-heading {
-          margin-left: auto;
-          margin-right: auto;
-        }
+        /* CLIENTS */
 
-        .pe-client-section .pe-section-heading p {
-          margin: 0 auto;
+        .pe-clients {
+          background: var(--paper);
         }
 
         .pe-client-grid {
           display: grid;
           grid-template-columns: repeat(6, 1fr);
-          border: 1px solid #e5ecef;
+          background: var(--white);
+          border: 1px solid var(--steel-100);
+          border-radius: 6px;
+          overflow: hidden;
         }
 
-        .pe-client-name {
-          min-height: 95px;
+        .pe-client {
+          min-height: 96px;
           display: grid;
           place-items: center;
-          padding: 15px;
-          border-right: 1px solid #e5ecef;
-          color: #34505e;
-          font-size: 13px;
-          font-weight: 850;
-          letter-spacing: .5px;
+          padding: 14px;
+          text-align: center;
+          border-right: 1px solid var(--steel-100);
+          font-family: var(--head);
+          font-weight: 700;
+          color: var(--steel-600);
+          letter-spacing: .4px;
+          transition: background .25s ease, color .25s ease;
         }
 
-        .pe-client-name:last-child {
+        .pe-client:hover {
+          background: #fff7f1;
+          color: var(--weld-dark);
+        }
+
+        .pe-client:last-child {
           border-right: 0;
         }
 
-        .pe-client-note {
-          color: #87969e;
-          font-size: 11px;
-          line-height: 1.7;
-          margin-top: 20px;
+        .pe-note {
+          color: var(--muted);
+          font-size: 13px;
+          margin-top: 16px !important;
         }
 
-        .pe-approach {
-          background: #f5f7f8;
+        /* PROCESS */
+
+        .pe-process {
+          background: var(--white);
         }
 
-        .pe-approach-grid {
+        .pe-steps {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
-          gap: 35px;
+          gap: 32px;
+          counter-reset: step;
         }
 
-        .pe-approach-item {
-          border-top: 2px solid #b8dce8;
-          padding-top: 24px;
+        .pe-step {
+          border-top: 3px solid var(--steel-100);
+          padding-top: 22px;
+          position: relative;
+          transition: border-color .25s ease, transform .25s ease;
         }
 
-        .pe-approach-item strong {
-          color: #1685aa;
-          font-size: 12px;
-          letter-spacing: 2px;
+        .pe-step:hover {
+          border-color: var(--weld);
+          transform: translateY(-4px);
         }
 
-        .pe-approach-item h3 {
-          color: #173442;
-          font-size: 20px;
-          margin: 17px 0 12px;
+        .pe-step::before {
+          counter-increment: step;
+          content: counter(step);
+          position: absolute;
+          top: -3px;
+          left: 0;
+          width: 56px;
+          border-top: 3px solid var(--weld);
+          padding-top: 18px;
+          font-family: var(--head);
+          font-weight: 800;
+          font-size: 30px;
+          color: var(--weld-dark);
+          line-height: 1;
         }
 
-        .pe-approach-item p {
-          color: #74848d;
-          font-size: 13px;
-          line-height: 1.9;
-          margin: 0;
+        .pe-step h3 {
+          font-size: 21px;
+          font-weight: 700;
+          color: var(--steel-900);
+          margin: 44px 0 10px;
         }
+
+        .pe-step p {
+          color: var(--muted);
+        }
+
+        /* FINAL CTA */
 
         .pe-cta {
+          position: relative;
+          overflow: hidden;
           background:
-            radial-gradient(ellipse at 90% 50%, rgba(69, 148, 177, .2), transparent 40%),
-            #0b202c;
-          padding: 75px 0;
+            radial-gradient(
+              ellipse at 90% 50%,
+              rgba(232,89,12,.4) 0%,
+              rgba(232,89,12,.16) 30%,
+              transparent 62%
+            ),
+            linear-gradient(
+              115deg,
+              #0b202c 0%,
+              #172d3a 55%,
+              #3b2a25 100%
+            );
           color: #fff;
+          padding: 76px 0;
+        }
+
+        .pe-cta::before {
+          content: "";
+          position: absolute;
+          width: 300px;
+          height: 300px;
+          right: -90px;
+          top: -160px;
+          border-radius: 50%;
+          background: rgba(232,89,12,.2);
+          filter: blur(75px);
+          pointer-events: none;
         }
 
         .pe-cta-inner {
+          position: relative;
+          z-index: 1;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          gap: 35px;
+          gap: 36px;
         }
 
         .pe-cta h2 {
-          font-size: clamp(30px, 4vw, 45px);
-          letter-spacing: -1.5px;
-          line-height: 1.2;
-          max-width: 650px;
-          margin: 15px 0;
+          font-size: clamp(28px, 3.6vw, 42px);
+          font-weight: 700;
+          line-height: 1.15;
+          max-width: 640px;
         }
 
         .pe-cta p {
-          color: #aebfc8;
-          font-size: 13px;
-          line-height: 1.8;
-          margin: 0;
+          margin-top: 12px;
+          max-width: 560px;
+          color: #c6d4dd;
         }
 
         .pe-cta-actions {
-          display: flex;
-          flex-direction: column;
+          display: grid;
           gap: 14px;
-          min-width: 190px;
+          min-width: 230px;
         }
 
-        .pe-cta-contact {
-          color: #b7ccd5;
-          font-size: 11px;
-          text-align: center;
+        .pe-cta .pe-btn {
+          background: var(--weld);
+          border: 1px solid var(--weld);
+          color: #fff;
+        }
+
+        .pe-cta .pe-btn:hover {
+          background: var(--weld-dark);
+          border-color: var(--weld-dark);
+        }
+
+        .pe-phone {
+          color: #fff;
           text-decoration: none;
+          font-weight: 600;
+          text-align: center;
+          display: flex;
+          gap: 8px;
+          align-items: center;
+          justify-content: center;
+          transition: color .2s ease;
         }
 
-        @media(max-width: 950px) {
-          .pe-hero {
-            min-height: 620px;
+        .pe-phone:hover {
+          color: #f3a77d;
+        }
+
+        /* ANIMATIONS */
+
+        @keyframes pe-fade-up {
+          from {
+            opacity: 0;
+            transform: translateY(22px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes pe-card-in {
+          from {
+            opacity: 0;
+            transform: translateY(25px) scale(.98);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+
+        @keyframes pe-line-in {
+          from { transform: scaleX(0); }
+          to { transform: scaleX(1); }
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 960px) {
+          .pe-hero-grid,
+          .pe-about {
+            grid-template-columns: 1fr;
+            gap: 44px;
           }
 
-          .pe-stats-grid {
+          .pe-trust-grid {
             grid-template-columns: repeat(2, 1fr);
           }
 
-          .pe-stat:nth-child(3) {
-            border-left: 1px solid #e7edef;
+          .pe-trust-item:nth-child(2) {
+            border-right: 0;
           }
 
-          .pe-about-grid {
-            gap: 40px;
+          .pe-trust-item:nth-child(3) {
+            padding-left: 0;
           }
 
-          .pe-industry-grid {
+          .pe-trust-item:nth-child(-n+2) {
+            border-bottom: 1px solid var(--steel-100);
+          }
+
+          .pe-service {
+            grid-template-columns: 56px 1fr;
+          }
+
+          .pe-service p {
+            grid-column: 2;
+          }
+
+          .pe-ind-grid {
             grid-template-columns: repeat(2, 1fr);
           }
 
@@ -713,142 +911,88 @@ function Home() {
             grid-template-columns: repeat(3, 1fr);
           }
 
-          .pe-client-name:nth-child(3) {
+          .pe-client:nth-child(3) {
             border-right: 0;
           }
 
-          .pe-client-name:nth-child(-n+3) {
-            border-bottom: 1px solid #e5ecef;
+          .pe-client:nth-child(-n+3) {
+            border-bottom: 1px solid var(--steel-100);
+          }
+
+          .pe-steps {
+            grid-template-columns: 1fr;
           }
         }
 
-        @media(max-width: 650px) {
+        @media (max-width: 640px) {
           .pe-container {
-            width: min(100% - 36px, 1200px);
+            width: calc(100% - 36px);
           }
 
           .pe-hero {
-            min-height: 650px;
+            padding-top: 64px;
           }
 
-          .pe-hero::after {
-            width: 280px;
-            height: 280px;
-            right: -110px;
-            top: 25%;
-          }
-
-          .pe-hero-content {
-            padding: 90px 0;
-          }
-
-          .pe-hero h1 {
-            font-size: clamp(42px, 12vw, 60px);
-            letter-spacing: -2.5px;
-          }
-
-          .pe-hero-description {
-            font-size: 14px;
-          }
-
-          .pe-hero-note {
-            margin-top: 42px;
-          }
-
-          .pe-stats-grid {
-            grid-template-columns: 1fr 1fr;
-          }
-
-          .pe-stat {
-            padding: 20px 12px;
-            gap: 10px;
-          }
-
-          .pe-stat-icon {
-            width: 36px;
-            height: 36px;
-          }
-
-          .pe-stat-value {
-            font-size: 16px;
-          }
-
-          .pe-stat-label {
-            font-size: 10px;
+          .pe-hero-grid {
+            padding-bottom: 64px;
           }
 
           .pe-section {
-            padding: 75px 0;
+            padding: 68px 0;
           }
 
-          .pe-about-grid {
-            grid-template-columns: 1fr;
-            gap: 40px;
+          .pe-head-row,
+          .pe-cta-inner {
+            flex-direction: column;
+            align-items: flex-start;
           }
 
-          .pe-about-visual {
-            min-height: 330px;
-          }
-
-          .pe-heading-row {
-            display: block;
-          }
-
-          .pe-services-grid {
+          .pe-ind-grid {
             grid-template-columns: 1fr;
           }
 
-          .pe-service-card {
-            min-height: auto;
-          }
-
-          .pe-industry-grid {
-            grid-template-columns: 1fr 1fr;
-          }
-
-          .pe-industry-item {
-            min-height: 135px;
-            padding: 19px;
+          .pe-ind {
+            min-height: 130px;
           }
 
           .pe-client-grid {
             grid-template-columns: repeat(2, 1fr);
           }
 
-          .pe-client-name {
-            min-height: 75px;
-            border-bottom: 1px solid #e5ecef;
+          .pe-client {
+            border-bottom: 1px solid var(--steel-100);
+            border-right: 1px solid var(--steel-100);
           }
 
-          .pe-client-name:nth-child(3) {
-            border-right: 1px solid #e5ecef;
-          }
-
-          .pe-client-name:nth-child(even) {
+          .pe-client:nth-child(even) {
             border-right: 0;
           }
 
-          .pe-approach-grid {
-            grid-template-columns: 1fr;
-            gap: 30px;
+          .pe-client:nth-last-child(-n+2) {
+            border-bottom: 0;
           }
 
-          .pe-cta {
-            padding: 65px 0;
-          }
-
-          .pe-cta-inner {
-            flex-direction: column;
-            align-items: flex-start;
-          }
-
+          .pe-actions .pe-btn,
           .pe-cta-actions {
             width: 100%;
           }
 
-          .pe-btn-primary,
-          .pe-btn-secondary {
-            width: 100%;
+          .pe-about-visual {
+            min-height: 320px;
+          }
+
+          .pe-service {
+            gap: 16px;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .pe-home *,
+          .pe-home *::before,
+          .pe-home *::after {
+            animation: none !important;
+            transition: none !important;
+            scroll-behavior: auto !important;
           }
         }
       `}</style>
@@ -856,373 +1000,249 @@ function Home() {
       <main className="pe-home">
 
         {/* HERO */}
-
         <section className="pe-hero">
-          <div className="pe-container">
-            <div className="pe-hero-content">
-
-              <div className="pe-hero-label">
-                <span></span>
-                Industrial Fabrication & Engineering
+          <div className="pe-container pe-hero-grid">
+            <div>
+              <div className="pe-hero-tag">
+                Industrial fabrication and engineering
               </div>
 
               <h1>
-                Built on experience.
-                <br />
-                Driven by <em>precision.</em>
+                Built on 18 years of experience.
+                <span>Driven by precision.</span>
               </h1>
 
-              <p className="pe-hero-description">
-                Prathamesh Enterprises brings 18 years of industry
-                experience to industrial fabrication requirements.
-                We focus on dependable execution, quality and
-                solutions shaped around your project needs.
+              <p className="pe-hero-text">
+                Prathamesh Enterprises delivers dependable industrial fabrication,
+                shaped around your drawings, specifications and project needs.
               </p>
 
-              <div className="pe-hero-actions">
-                <Link to="/enquiry" className="pe-btn-primary">
-                  DISCUSS YOUR PROJECT
-                  <ArrowUpRight size={17} />
+              <div className="pe-actions">
+                <Link to="/enquiry" className="pe-btn pe-btn-primary">
+                  Discuss your project <ArrowUpRight size={18} />
                 </Link>
 
-                <Link to="/services" className="pe-btn-secondary">
-                  EXPLORE OUR SERVICES
-                  <ArrowRight size={16} />
+                <Link to="/services" className="pe-btn pe-btn-ghost">
+                  Explore our services <ArrowRight size={18} />
                 </Link>
               </div>
-
-              <div className="pe-hero-note">
-                <span className="pe-hero-note-line"></span>
-                <strong>18+ Years</strong>
-                <span>of industry experience</span>
-              </div>
-
             </div>
+
+            <aside
+              className="pe-brief"
+              aria-label="What to send with your enquiry"
+            >
+              <h2>Ready to get a quote?</h2>
+              <p>Keep these handy when you send your enquiry:</p>
+
+              <ul>
+                <li><FileText size={18} /> Drawings or sketches</li>
+                <li><FileText size={18} /> Material and specification details</li>
+                <li><FileText size={18} /> Quantity and delivery timeline</li>
+              </ul>
+
+              <Link to="/enquiry" className="pe-btn pe-btn-primary">
+                Send an enquiry <ArrowUpRight size={18} />
+              </Link>
+            </aside>
           </div>
         </section>
 
-        {/* EXPERIENCE HIGHLIGHTS */}
+        {/* TRUST BAR */}
+        <section className="pe-trust">
+          <div className="pe-container pe-trust-grid">
+            {highlights.map((item) => {
+              const Icon = item.icon;
 
-        <section className="pe-stats">
-          <div className="pe-container">
-            <div className="pe-stats-grid">
-              {highlights.map((item, index) => {
-                const Icon = item.icon;
+              return (
+                <div className="pe-trust-item" key={item.value}>
+                  <Icon className="pe-trust-icon" size={28} />
 
-                return (
-                  <div className="pe-stat" key={index}>
-                    <div className="pe-stat-icon">
-                      <Icon size={21} />
-                    </div>
-
-                    <div>
-                      <div className="pe-stat-value">
-                        {item.value}
-                      </div>
-                      <div className="pe-stat-label">
-                        {item.label}
-                      </div>
-                    </div>
+                  <div>
+                    <strong>{item.value}</strong>
+                    <span>{item.label}</span>
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              );
+            })}
           </div>
         </section>
 
         {/* ABOUT */}
-
         <section className="pe-section">
-          <div className="pe-container">
-            <div className="pe-about-grid">
-
-              <div className="pe-about-visual">
-                <div className="pe-about-visual-content">
-                  <strong>18+</strong>
-                  <span>Years of industry experience</span>
-                </div>
+          <div className="pe-container pe-about">
+            <div
+              className="pe-about-visual"
+              role="img"
+              aria-label="18 years of industry experience"
+            >
+              <div>
+                <strong>18+</strong>
+                <span>years of industry experience</span>
               </div>
+            </div>
 
-              <div className="pe-about-copy">
-                <span className="pe-eyebrow">
-                  About Prathamesh Enterprises
-                </span>
+            <div className="pe-about-text">
+              <h2>
+                Experience that understands industrial requirements.
+              </h2>
 
-                <h2>
-                  Experience that understands industrial requirements.
-                </h2>
+              <p>
+                With 18 years in the fabrication industry, Prathamesh Enterprises
+                works to your project requirements, specifications and quality
+                expectations.
+              </p>
 
-                <p>
-                  With 18 years of experience in the fabrication
-                  industry, Prathamesh Enterprises works with an
-                  understanding of industrial project expectations.
-                  Our focus is on delivering work that aligns with
-                  project requirements, specifications and quality
-                  expectations.
-                </p>
+              <ul className="pe-checks">
+                <li><CheckCircle2 size={19} /> 18 years of industry experience</li>
+                <li><CheckCircle2 size={19} /> Project-focused fabrication approach</li>
+                <li><CheckCircle2 size={19} /> Experience across industrial sectors</li>
+                <li><CheckCircle2 size={19} /> Focus on quality and dependable execution</li>
+              </ul>
 
-                <div className="pe-check-list">
-                  <div className="pe-check-item">
-                    <CheckCircle2 size={18} />
-                    18 years of industry experience
-                  </div>
-
-                  <div className="pe-check-item">
-                    <CheckCircle2 size={18} />
-                    Project-focused fabrication approach
-                  </div>
-
-                  <div className="pe-check-item">
-                    <CheckCircle2 size={18} />
-                    Experience across industrial sectors
-                  </div>
-
-                  <div className="pe-check-item">
-                    <CheckCircle2 size={18} />
-                    Focus on quality and dependable execution
-                  </div>
-                </div>
-
-                <Link to="/about" className="pe-text-link">
-                  DISCOVER OUR COMPANY
-                  <ArrowUpRight size={17} />
-                </Link>
-              </div>
-
+              <Link to="/about" className="pe-link">
+                About our company <ArrowUpRight size={17} />
+              </Link>
             </div>
           </div>
         </section>
 
         {/* SERVICES */}
-
-        <section className="pe-section pe-services-section">
+        <section className="pe-section pe-services">
           <div className="pe-container">
-
-            <div className="pe-heading-row">
-              <div className="pe-section-heading">
-                <span className="pe-eyebrow">
-                  What We Do
-                </span>
-
-                <h2>
-                  Fabrication solutions shaped around your needs.
-                </h2>
-
+            <div className="pe-head-row">
+              <div className="pe-head">
+                <h2>Fabrication solutions shaped around your needs.</h2>
                 <p>
-                  We work with clients to understand their project
-                  requirements and provide suitable fabrication
-                  solutions.
+                  We work with you to understand your project requirements and
+                  provide the right fabrication solution.
                 </p>
               </div>
 
-              <Link to="/services" className="pe-text-link">
-                VIEW ALL SERVICES
-                <ArrowUpRight size={17} />
+              <Link
+                to="/services"
+                className="pe-link"
+                style={{ marginBottom: 48 }}
+              >
+                View all services <ArrowUpRight size={17} />
               </Link>
             </div>
 
-            <div className="pe-services-grid">
+            <div className="pe-service-list">
               {services.map((service) => {
                 const Icon = service.icon;
 
                 return (
-                  <article
-                    className="pe-service-card"
-                    key={service.number}
-                  >
-                    <span className="pe-service-number">
-                      / {service.number}
-                    </span>
-
+                  <article className="pe-service" key={service.title}>
                     <div className="pe-service-icon">
-                      <Icon size={25} />
+                      <Icon size={26} />
                     </div>
 
                     <h3>{service.title}</h3>
-
                     <p>{service.description}</p>
                   </article>
                 );
               })}
             </div>
-
           </div>
         </section>
 
         {/* INDUSTRIES */}
-
         <section className="pe-section pe-industries">
           <div className="pe-container">
-
-            <div className="pe-section-heading">
-              <span className="pe-eyebrow">
-                Industries
-              </span>
-
-              <h2>
-                Supporting industries where quality matters.
-              </h2>
-
+            <div className="pe-head">
+              <h2>Supporting industries where quality matters.</h2>
               <p>
-                Our experience includes working with businesses
-                across industrial environments, including
+                Our experience spans industrial environments, including
                 pharmaceutical and manufacturing sectors.
               </p>
             </div>
 
-            <div className="pe-industry-grid">
-              {industries.map((industry, index) => (
-                <div className="pe-industry-item" key={industry}>
-                  <Building2 size={24} />
-                  <span>{industry}</span>
-                </div>
-              ))}
-            </div>
+            <div className="pe-ind-grid">
+              {industries.map((item) => {
+                const Icon = item.icon;
 
+                return (
+                  <div className="pe-ind" key={item.name}>
+                    <Icon size={30} />
+                    <span>{item.name}</span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </section>
 
-        {/* COMPANY EXPERIENCE */}
-
-        <section className="pe-section pe-client-section">
+        {/* CLIENT EXPERIENCE */}
+        <section className="pe-section pe-clients">
           <div className="pe-container">
-
-            <div className="pe-section-heading">
-              <span className="pe-eyebrow">
-                Industry Experience
-              </span>
-
-              <h2>
-                Experience across recognised companies.
-              </h2>
-
+            <div className="pe-head">
+              <h2>Experience across recognised companies.</h2>
               <p>
-                The following company names reflect the business
-                experience shared with us. They are presented as
-                text references, not as endorsements or official
-                partnerships.
+                These company names reflect business experience shared with us.
+                They are text references, not endorsements or official partnerships.
               </p>
             </div>
 
             <div className="pe-client-grid">
               {clients.map((client) => (
-                <div className="pe-client-name" key={client}>
+                <div className="pe-client" key={client}>
                   {client}
                 </div>
               ))}
             </div>
 
-            <p className="pe-client-note">
-              Company names are shown for experience reference only.
-              No endorsement or affiliation is implied.
+            <p className="pe-note">
+              Company names are shown for experience reference only. No endorsement
+              or affiliation is implied.
             </p>
-
           </div>
         </section>
 
-        {/* APPROACH */}
-
-        <section className="pe-section pe-approach">
+        {/* PROCESS */}
+        <section className="pe-section pe-process">
           <div className="pe-container">
-
-            <div className="pe-section-heading">
-              <span className="pe-eyebrow">
-                Our Approach
-              </span>
-
-              <h2>
-                A practical approach to every project.
-              </h2>
-
+            <div className="pe-head">
+              <h2>A practical approach to every project.</h2>
               <p>
-                Clear communication and an understanding of
-                requirements help establish the foundation
-                for successful project execution.
+                Clear communication and a shared understanding of requirements
+                set up every project for success.
               </p>
             </div>
 
-            <div className="pe-approach-grid">
-
-              <div className="pe-approach-item">
-                <strong>01 / UNDERSTAND</strong>
-                <h3>Understand the requirement</h3>
-                <p>
-                  We begin by understanding the project scope,
-                  specifications and expectations shared by
-                  the client.
-                </p>
-              </div>
-
-              <div className="pe-approach-item">
-                <strong>02 / PLAN</strong>
-                <h3>Plan the approach</h3>
-                <p>
-                  We discuss the suitable fabrication approach
-                  and align on the requirements before moving
-                  forward.
-                </p>
-              </div>
-
-              <div className="pe-approach-item">
-                <strong>03 / EXECUTE</strong>
-                <h3>Focus on execution</h3>
-                <p>
-                  We focus on carrying out the agreed work with
-                  attention to quality, coordination and
-                  project expectations.
-                </p>
-              </div>
-
+            <div className="pe-steps">
+              {steps.map((step) => (
+                <div className="pe-step" key={step.title}>
+                  <h3>{step.title}</h3>
+                  <p>{step.text}</p>
+                </div>
+              ))}
             </div>
-
           </div>
         </section>
 
         {/* CTA */}
-
         <section className="pe-cta">
-          <div className="pe-container">
-            <div className="pe-cta-inner">
+          <div className="pe-container pe-cta-inner">
+            <div>
+              <h2>
+                Have a fabrication requirement? Let's discuss your project.
+              </h2>
 
-              <div>
-                <span className="pe-eyebrow">
-                  Start a Conversation
-                </span>
+              <p>
+                Share your project details with Prathamesh Enterprises and we'll
+                get in touch to understand your requirements.
+              </p>
+            </div>
 
-                <h2>
-                  Have a fabrication requirement?
-                  Let's discuss your project.
-                </h2>
+            <div className="pe-cta-actions">
+              <Link to="/enquiry" className="pe-btn">
+                Send an enquiry <ArrowUpRight size={18} />
+              </Link>
 
-                <p>
-                  Share your project details with Prathamesh
-                  Enterprises. We'll connect with you to
-                  understand your requirements.
-                </p>
-              </div>
-
-              <div className="pe-cta-actions">
-                <Link to="/enquiry" className="pe-btn-primary">
-                  SEND AN ENQUIRY
-                  <MoveUpRight size={17} />
-                </Link>
-
-                <a
-                  href="tel:+919850587474"
-                  className="pe-cta-contact"
-                >
-                  <Phone
-                    size={13}
-                    style={{
-                      display: "inline",
-                      verticalAlign: "middle",
-                      marginRight: 6
-                    }}
-                  />
-                  +91 98505 87474
-                </a>
-              </div>
-
+              <a href="tel:+919850587474" className="pe-phone">
+                <Phone size={16} /> +91 98505 87474
+              </a>
             </div>
           </div>
         </section>

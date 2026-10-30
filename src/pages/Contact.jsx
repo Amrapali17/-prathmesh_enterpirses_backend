@@ -10,7 +10,6 @@ import {
   Clock3,
   Building2,
   Send,
-  ExternalLink
 } from "lucide-react";
 
 function Contact() {
@@ -21,7 +20,12 @@ function Contact() {
     <>
       <style>{`
         .pe-contact-page {
-          background: #f5f7f8;
+          --orange: #ed762b;
+          --orange-dark: #d75c19;
+          --navy: #101e29;
+          --navy-light: #192c39;
+
+          background: #f1f3f4;
           color: #142e3b;
           font-family: Arial, Helvetica, sans-serif;
           overflow: hidden;
@@ -36,12 +40,14 @@ function Contact() {
           margin: auto;
         }
 
+        /* HERO */
+
         .pe-contact-hero {
           position: relative;
           padding: 100px 0 95px;
           background:
-            radial-gradient(circle at 85% 40%, rgba(92, 185, 218, .2), transparent 35%),
-            #102b3a;
+            radial-gradient(circle at 85% 40%, rgba(237,118,43,.16), transparent 35%),
+            linear-gradient(120deg, #101e29, #192c39);
           color: white;
         }
 
@@ -55,7 +61,7 @@ function Contact() {
           display: flex;
           align-items: center;
           gap: 12px;
-          color: #72c9e7;
+          color: var(--orange);
           font-size: 11px;
           font-weight: 800;
           letter-spacing: 2.3px;
@@ -66,7 +72,7 @@ function Contact() {
           content: "";
           width: 28px;
           height: 2px;
-          background: #72c9e7;
+          background: var(--orange);
         }
 
         .pe-contact-hero h1 {
@@ -77,11 +83,11 @@ function Contact() {
         }
 
         .pe-contact-hero h1 span {
-          color: #72c9e7;
+          color: var(--orange);
         }
 
         .pe-contact-hero p {
-          color: #b8cbd4;
+          color: #b8c5cd;
           font-size: 14px;
           line-height: 1.9;
           max-width: 610px;
@@ -97,9 +103,11 @@ function Contact() {
         }
 
         .pe-contact-breadcrumb a {
-          color: #72c9e7;
+          color: var(--orange);
           text-decoration: none;
         }
+
+        /* CONTACT OPTIONS */
 
         .pe-contact-main {
           padding: 85px 0;
@@ -111,7 +119,7 @@ function Contact() {
         }
 
         .pe-contact-label {
-          color: #1685aa;
+          color: var(--orange-dark);
           font-size: 10px;
           font-weight: 800;
           letter-spacing: 2px;
@@ -141,15 +149,17 @@ function Contact() {
 
         .pe-contact-card {
           padding: 29px;
-          background: white;
-          border: 1px solid #e2e9ec;
+          background: #fff;
+          border: 1px solid #e0e5e8;
+          border-top: 3px solid transparent;
           transition: .25s ease;
         }
 
         .pe-contact-card:hover {
           transform: translateY(-4px);
-          border-color: #8bcde2;
-          box-shadow: 0 15px 35px rgba(20,55,70,.06);
+          border-top-color: var(--orange);
+          border-color: #e6b18e;
+          box-shadow: 0 15px 35px rgba(20,55,70,.08);
         }
 
         .pe-contact-card-icon {
@@ -157,8 +167,8 @@ function Contact() {
           height: 47px;
           display: grid;
           place-items: center;
-          background: #eaf5f9;
-          color: #1685aa;
+          background: #fff0e5;
+          color: var(--orange-dark);
           margin-bottom: 22px;
         }
 
@@ -179,7 +189,7 @@ function Contact() {
           display: inline-flex;
           align-items: center;
           gap: 9px;
-          color: #1685aa;
+          color: var(--orange-dark);
           font-size: 12px;
           font-weight: 800;
           text-decoration: none;
@@ -187,12 +197,15 @@ function Contact() {
         }
 
         .pe-contact-card a:hover {
-          color: #102b3a;
+          color: #142e3b;
         }
+
+        /* BUSINESS INFORMATION */
 
         .pe-contact-info {
           padding: 85px 0;
-          background: #eaf0f3;
+          background: #e5eaed;
+          border-top: 1px solid #dce2e5;
         }
 
         .pe-contact-info-grid {
@@ -221,11 +234,11 @@ function Contact() {
           align-items: flex-start;
           gap: 15px;
           padding: 18px 0;
-          border-bottom: 1px solid #d8e2e7;
+          border-bottom: 1px solid #d1dade;
         }
 
         .pe-contact-detail-icon {
-          color: #1685aa;
+          color: var(--orange-dark);
           margin-top: 2px;
         }
 
@@ -248,14 +261,17 @@ function Contact() {
         }
 
         .pe-contact-detail a:hover {
-          color: #1685aa;
+          color: var(--orange-dark);
         }
+
+        /* LOCATION PANEL */
 
         .pe-contact-map {
           min-height: 320px;
           background:
-            radial-gradient(circle at 50% 50%, rgba(114,201,231,.15), transparent 35%),
-            #102b3a;
+            radial-gradient(circle at 50% 50%, rgba(237,118,43,.18), transparent 40%),
+            linear-gradient(135deg, #101e29, #1d3543);
+          border: 1px solid rgba(255,255,255,.08);
           display: flex;
           flex-direction: column;
           justify-content: center;
@@ -266,7 +282,7 @@ function Contact() {
         }
 
         .pe-contact-map svg {
-          color: #72c9e7;
+          color: var(--orange);
           margin-bottom: 18px;
         }
 
@@ -284,17 +300,48 @@ function Contact() {
 
         .pe-contact-map-note {
           font-size: 10px;
-          color: #7f9ba8;
+          color: var(--orange);
           margin-top: 10px;
         }
 
+        /* FINAL CTA - ORANGE GRADIENT */
+
         .pe-contact-cta {
+          position: relative;
+          overflow: hidden;
           padding: 80px 0;
-          background: #0b202c;
+          background:
+            radial-gradient(
+              ellipse at 90% 50%,
+              rgba(237, 118, 43, 0.38) 0%,
+              rgba(237, 118, 43, 0.16) 28%,
+              transparent 60%
+            ),
+            linear-gradient(
+              115deg,
+              #0b202c 0%,
+              #172d3a 55%,
+              #3b2a25 100%
+            );
           color: white;
         }
 
+        .pe-contact-cta::before {
+          content: "";
+          position: absolute;
+          width: 320px;
+          height: 320px;
+          right: -100px;
+          top: -170px;
+          border-radius: 50%;
+          background: rgba(237, 118, 43, 0.22);
+          filter: blur(75px);
+          pointer-events: none;
+        }
+
         .pe-contact-cta-inner {
+          position: relative;
+          z-index: 1;
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -321,8 +368,8 @@ function Contact() {
           justify-content: center;
           gap: 12px;
           padding: 17px 22px;
-          background: #72c9e7;
-          color: #092330;
+          background: var(--orange);
+          color: #fff;
           font-size: 11px;
           font-weight: 800;
           text-decoration: none;
@@ -331,9 +378,11 @@ function Contact() {
         }
 
         .pe-contact-button:hover {
-          background: white;
+          background: var(--orange-dark);
           transform: translateY(-3px);
         }
+
+        /* RESPONSIVE */
 
         @media(max-width: 750px) {
           .pe-contact-container {
@@ -344,10 +393,7 @@ function Contact() {
             padding: 75px 0;
           }
 
-          .pe-contact-main {
-            padding: 65px 0;
-          }
-
+          .pe-contact-main,
           .pe-contact-info {
             padding: 65px 0;
           }
@@ -378,6 +424,14 @@ function Contact() {
 
           .pe-contact-hero h1 {
             letter-spacing: -1.8px;
+          }
+        }
+
+        @media(prefers-reduced-motion: reduce) {
+          .pe-contact-page *,
+          .pe-contact-page *::before,
+          .pe-contact-page *::after {
+            transition: none !important;
           }
         }
       `}</style>
@@ -490,7 +544,7 @@ function Contact() {
                 <a
                   href={`https://wa.me/91${phone}`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   Start WhatsApp Chat
                   <ArrowUpRight size={15} />
@@ -499,7 +553,7 @@ function Contact() {
 
               <article className="pe-contact-card">
                 <div className="pe-contact-card-icon">
-                  <FileTextIcon />
+                  <Send size={21} />
                 </div>
 
                 <h3>Request a Quotation</h3>
@@ -598,7 +652,7 @@ function Contact() {
           </div>
         </section>
 
-        {/* CTA */}
+        {/* FINAL CTA */}
 
         <section className="pe-contact-cta">
           <div className="pe-contact-container">
@@ -635,10 +689,6 @@ function Contact() {
       </main>
     </>
   );
-}
-
-function FileTextIcon() {
-  return <Send size={21} />;
 }
 
 export default Contact;
