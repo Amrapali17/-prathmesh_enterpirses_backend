@@ -52,7 +52,7 @@ function Contact() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/inquiries",
+   "https://prathmesh-enterpirses-backend.onrender.com/api/inquiries",
         {
           method: "POST",
           headers: {
