@@ -394,14 +394,14 @@ function Footer() {
                   <span className="pe-footer-contact-icon">
                     <Phone />
                   </span>
-                  <span>+91 98505 87474</span>
+                  <span>+91 9850987474</span>
                 </a>
 
-                <a href="mailto:Prathmeshshelar356@gmail.com">
+                <a href="mailto:prathmeshshshelar356@gmail.com">
                   <span className="pe-footer-contact-icon">
                     <Mail />
                   </span>
-                  <span>Prathmeshshelar356@gmail.com</span>
+                  <span>prathmeshshhelar356@gmail.com</span>
                 </a>
 
                 <a

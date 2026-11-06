@@ -15,12 +15,9 @@ import {
   Plus
 } from "lucide-react";
 
-/* =========================================
-   STAINLESS STEEL & METAL FABRICATION IMAGES
-========================================= */
+/* CLIENT'S ACTUAL FABRICATION IMAGES */
 
-const HERO_IMAGE =
-  "https://sspipingqatar.com/assets/images/service_fabrication.webp";
+const HERO_IMAGE = "/products/Image.jpg";
 
 function Services() {
   const services = [
@@ -35,8 +32,7 @@ function Services() {
         "Industrial project support",
         "Specification-oriented execution"
       ],
-      image:
-        "https://www.sticicosud.fr/app/uploads/2022/03/CHAUDRO-INOX-1024x683.jpeg"
+      image: "/products/image1.jpeg"
     },
     {
       number: "02",
@@ -49,8 +45,7 @@ function Services() {
         "Drawing-based discussions",
         "Application-specific planning"
       ],
-      image:
-        "https://images.squarespace-cdn.com/content/v1/674dbaccdee86455c1524a37/1733433996560-NBM2R0TANS93YXX2J6Y9/unsplash-image-xD5SWy7hMbw.jpg"
+      image: "/products/image3.jpeg"
     },
     {
       number: "03",
@@ -63,8 +58,7 @@ function Services() {
         "Dimension-related coordination",
         "Project scope discussions"
       ],
-      image:
-        "https://lico-metall.de/_nuxt/lasern.46c9cc37.jpg"
+      image: "/products/image4.jpeg"
     },
     {
       number: "04",
@@ -77,8 +71,7 @@ function Services() {
         "Work scope coordination",
         "Execution planning"
       ],
-      image:
-        "https://cdn.website-editor.net/774f10ef6a1c41c2923adb38eb5dfe5d/dms3rep/multi/instalaciones.JPG"
+      image: "/products/image5.jpeg"
     },
     {
       number: "05",
@@ -91,8 +84,7 @@ function Services() {
         "Material and specification discussions",
         "Custom project coordination"
       ],
-      image:
-        "https://blog.blmgroup.com/hs-fs/hubfs/ls5-cutting-stainless-steel.jpg?name=ls5-cutting-stainless-steel.jpg&width=880"
+      image: "/products/image7.jpeg"
     },
     {
       number: "06",
@@ -105,8 +97,7 @@ function Services() {
         "Scope and timeline discussions",
         "Client coordination"
       ],
-      image:
-        "https://www.hugowitt-stahl.de/fileadmin/pxhugowitt/Bilder/Produkte/Edelstahl-%20und%20Aluminiumbauteile/3-12.jpg"
+      image: "/products/image1.jpeg"
     }
   ];
 
@@ -1291,9 +1282,6 @@ function Services() {
                         src={service.image}
                         alt={`${service.title} industrial fabrication`}
                         loading="lazy"
-                        onError={(event) => {
-                          event.currentTarget.style.display = "none";
-                        }}
                       />
                       <span className="pe-s-service-image-number">
                         PE / {service.number}
@@ -1474,4 +1462,3 @@ function Services() {
 }
 
 export default Services;
- 

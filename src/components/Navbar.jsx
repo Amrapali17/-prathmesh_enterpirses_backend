@@ -228,7 +228,7 @@ function Navbar() {
               <MapPin size={14} /> Kurkumbh, Daund, Pune 413802
             </span>
             <a href="tel:+919850587474">
-              <Phone size={14} /> +91 98505 87474
+              <Phone size={14} /> +91 9850987474
             </a>
           </div>
         </div>

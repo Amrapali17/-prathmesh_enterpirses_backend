@@ -53,7 +53,8 @@ function Home() {
     "CLEAN SCIENCE",
     "ETERNIS",
     "LUPIN",
-    "SUN PHARMA"
+    "SUN PHARMA",
+    "CARGILL"
   ];
 
   const highlights = [
@@ -134,6 +135,90 @@ function Home() {
           outline-offset: 3px;
         }
 
+        /* GLOBAL ANIMATION */
+
+        @keyframes pe-fade-up {
+          from {
+            opacity: 0;
+            transform: translateY(28px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes pe-fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        @keyframes pe-card-in {
+          from {
+            opacity: 0;
+            transform: translateY(35px) scale(.97);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+
+        @keyframes pe-line-in {
+          from { transform: scaleX(0); }
+          to { transform: scaleX(1); }
+        }
+
+        @keyframes pe-logo-float {
+          0%, 100% {
+            transform: translateY(0) rotate(-3deg);
+          }
+          50% {
+            transform: translateY(-13px) rotate(3deg);
+          }
+        }
+
+        @keyframes pe-logo-glow {
+          0%, 100% {
+            box-shadow:
+              0 0 0 rgba(232,89,12,0),
+              0 15px 35px rgba(0,0,0,.2);
+          }
+          50% {
+            box-shadow:
+              0 0 35px rgba(232,89,12,.35),
+              0 20px 45px rgba(0,0,0,.3);
+          }
+        }
+
+        @keyframes pe-pulse {
+          0%, 100% { opacity: .55; transform: scale(.95); }
+          50% { opacity: 1; transform: scale(1.08); }
+        }
+
+        @keyframes pe-orbit {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+
+        @keyframes pe-watermark {
+          0%, 100% {
+            transform: translate(-50%, -50%) scale(1);
+            filter: blur(22px);
+            opacity: .075;
+          }
+          50% {
+            transform: translate(-50%, -53%) scale(1.07);
+            filter: blur(30px);
+            opacity: .13;
+          }
+        }
+
+        @keyframes pe-shine {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+        }
+
         /* BUTTONS */
 
         .pe-btn {
@@ -146,12 +231,29 @@ function Home() {
           text-decoration: none;
           font-weight: 600;
           font-size: 15px;
-          transition:
-            background .25s ease,
-            color .25s ease,
-            border-color .25s ease,
-            transform .25s ease,
-            box-shadow .25s ease;
+          transition: all .3s ease;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .pe-btn::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 70%;
+          height: 100%;
+          background: linear-gradient(
+            110deg,
+            transparent,
+            rgba(255,255,255,.25),
+            transparent
+          );
+          transition: left .55s ease;
+        }
+
+        .pe-btn:hover::after {
+          left: 130%;
         }
 
         .pe-btn-primary {
@@ -164,8 +266,8 @@ function Home() {
         .pe-btn-primary:hover {
           background: var(--weld-dark);
           border-color: var(--weld-dark);
-          transform: translateY(-3px);
-          box-shadow: 0 12px 25px rgba(232, 89, 12, .24);
+          transform: translateY(-4px);
+          box-shadow: 0 14px 30px rgba(232, 89, 12, .3);
         }
 
         .pe-btn-ghost {
@@ -176,7 +278,7 @@ function Home() {
         .pe-btn-ghost:hover {
           background: rgba(255,255,255,.1);
           border-color: #fff;
-          transform: translateY(-2px);
+          transform: translateY(-3px);
         }
 
         .pe-link {
@@ -188,11 +290,12 @@ function Home() {
           text-decoration: none;
           border-bottom: 2px solid currentColor;
           padding-bottom: 2px;
-          transition: color .2s ease;
+          transition: all .25s ease;
         }
 
         .pe-link:hover {
           color: var(--steel-900);
+          gap: 14px;
         }
 
         /* HERO */
@@ -201,7 +304,7 @@ function Home() {
           background:
             radial-gradient(
               ellipse at 85% 35%,
-              rgba(232, 89, 12, .17) 0%,
+              rgba(232, 89, 12, .2) 0%,
               transparent 38%
             ),
             repeating-linear-gradient(
@@ -221,6 +324,22 @@ function Home() {
           isolation: isolate;
         }
 
+        .pe-hero::before {
+          content: "";
+          position: absolute;
+          width: 450px;
+          height: 450px;
+          right: -140px;
+          top: -180px;
+          border: 1px solid rgba(255,255,255,.08);
+          border-radius: 50%;
+          box-shadow:
+            0 0 0 35px rgba(255,255,255,.018),
+            0 0 0 75px rgba(255,255,255,.012);
+          animation: pe-orbit 45s linear infinite;
+          pointer-events: none;
+        }
+
         .pe-hero::after {
           content: "";
           position: absolute;
@@ -235,7 +354,7 @@ function Home() {
             transparent 70%
           );
           transform-origin: left;
-          animation: pe-line-in 1.2s .3s ease both;
+          animation: pe-line-in 1.4s .3s ease both;
         }
 
         .pe-hero-grid {
@@ -244,6 +363,68 @@ function Home() {
           gap: 64px;
           align-items: center;
           padding-bottom: 96px;
+          position: relative;
+          z-index: 1;
+        }
+
+        .pe-hero-copy {
+          animation: pe-fade-up .9s .15s ease both;
+        }
+
+        /* LOGO */
+
+        .pe-logo-area {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+          margin-bottom: 30px;
+          animation: pe-fade-up .8s ease both;
+        }
+
+        .pe-logo-mark {
+          width: 58px;
+          height: 58px;
+          flex-shrink: 0;
+          display: grid;
+          place-items: center;
+          background: #0e2233;
+          color: #fff;
+          border-radius: 5px;
+          border-bottom: 5px solid var(--weld);
+          font-family: var(--head);
+          font-size: 37px;
+          font-weight: 800;
+          line-height: 1;
+          animation: pe-logo-float 5s ease-in-out infinite,
+                     pe-logo-glow 4s ease-in-out infinite;
+          position: relative;
+        }
+
+        .pe-logo-mark::before {
+          content: "";
+          position: absolute;
+          inset: -7px;
+          border: 1px solid rgba(232,89,12,.5);
+          border-radius: 8px;
+          animation: pe-pulse 3s ease-in-out infinite;
+        }
+
+        .pe-logo-name strong {
+          display: block;
+          font-family: var(--head);
+          font-size: 16px;
+          font-weight: 800;
+          letter-spacing: 1.4px;
+          line-height: 1.3;
+        }
+
+        .pe-logo-name span {
+          display: block;
+          color: var(--steel-300);
+          font-size: 11px;
+          letter-spacing: 2.5px;
+          text-transform: uppercase;
+          margin-top: 3px;
         }
 
         .pe-hero-tag {
@@ -258,7 +439,7 @@ function Home() {
           letter-spacing: .3px;
           margin-bottom: 26px;
           background: rgba(255,255,255,.045);
-          animation: pe-fade-up .7s .1s ease both;
+          animation: pe-fade-up .8s .3s ease both;
         }
 
         .pe-hero-tag::before {
@@ -268,6 +449,7 @@ function Home() {
           border-radius: 50%;
           background: var(--weld);
           box-shadow: 0 0 12px rgba(232,89,12,.8);
+          animation: pe-pulse 2s ease-in-out infinite;
         }
 
         .pe-hero h1 {
@@ -276,7 +458,7 @@ function Home() {
           line-height: 1.04;
           letter-spacing: -1.5px;
           font-stretch: 90%;
-          animation: pe-fade-up .8s .2s ease both;
+          animation: pe-fade-up .9s .4s ease both;
         }
 
         .pe-hero h1 span {
@@ -290,14 +472,14 @@ function Home() {
           color: #c6d4dd;
           margin: 24px 0 34px !important;
           font-size: 17px;
-          animation: pe-fade-up .8s .35s ease both;
+          animation: pe-fade-up .9s .55s ease both;
         }
 
         .pe-actions {
           display: flex;
           flex-wrap: wrap;
           gap: 14px;
-          animation: pe-fade-up .8s .45s ease both;
+          animation: pe-fade-up .9s .65s ease both;
         }
 
         .pe-brief {
@@ -307,8 +489,14 @@ function Home() {
           padding: 30px;
           border-top: 5px solid var(--weld);
           box-shadow: 0 30px 60px rgba(0,0,0,.3);
-          animation: pe-card-in .9s .35s ease both;
+          animation: pe-card-in 1s .5s ease both;
           position: relative;
+          transition: transform .35s ease, box-shadow .35s ease;
+        }
+
+        .pe-brief:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 40px 75px rgba(0,0,0,.35);
         }
 
         .pe-brief::after {
@@ -366,6 +554,8 @@ function Home() {
         .pe-trust {
           background: var(--white);
           border-bottom: 1px solid var(--steel-100);
+          position: relative;
+          z-index: 2;
         }
 
         .pe-trust-grid {
@@ -379,11 +569,17 @@ function Home() {
           gap: 14px;
           padding: 28px 20px;
           border-right: 1px solid var(--steel-100);
-          transition: background .25s ease;
+          transition: background .3s ease, transform .3s ease;
+          animation: pe-fade-up .8s ease both;
         }
+
+        .pe-trust-item:nth-child(2) { animation-delay: .1s; }
+        .pe-trust-item:nth-child(3) { animation-delay: .2s; }
+        .pe-trust-item:nth-child(4) { animation-delay: .3s; }
 
         .pe-trust-item:hover {
           background: #fffaf6;
+          transform: translateY(-5px);
         }
 
         .pe-trust-item:first-child {
@@ -397,11 +593,11 @@ function Home() {
         .pe-trust-icon {
           color: var(--weld);
           flex-shrink: 0;
-          transition: transform .25s ease;
+          transition: transform .35s ease;
         }
 
         .pe-trust-item:hover .pe-trust-icon {
-          transform: translateY(-4px);
+          transform: translateY(-5px) rotate(-8deg) scale(1.12);
         }
 
         .pe-trust-item strong {
@@ -449,87 +645,93 @@ function Home() {
           gap: 30px;
         }
 
-        /* ABOUT */
+        /* ABOUT WITH FULL LOGO WATERMARK */
 
         .pe-about {
-          display: grid;
-          grid-template-columns: .9fr 1.1fr;
-          gap: 72px;
-          align-items: center;
-        }
-
-        .pe-about-visual {
-          min-height: 440px;
-          border-radius: 6px;
-          padding: 32px;
-          display: flex;
-          align-items: flex-end;
-          color: #fff;
           position: relative;
+          isolation: isolate;
           overflow: hidden;
-          background:
-            radial-gradient(
-              circle at 85% 15%,
-              rgba(232,89,12,.3),
-              transparent 35%
-            ),
-            linear-gradient(
-              180deg,
-              transparent 35%,
-              rgba(14,34,51,.92)
-            ),
-            repeating-linear-gradient(
-              135deg,
-              #2b4a5f 0 18px,
-              #244257 18px 36px
-            );
-          border-bottom: 6px solid var(--weld);
-          box-shadow: 0 18px 40px rgba(14,34,51,.12);
-          transition: transform .35s ease, box-shadow .35s ease;
-        }
-
-        .pe-about-visual:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 25px 50px rgba(14,34,51,.17);
-        }
-
-        .pe-about-visual strong {
           display: block;
+          padding: 65px 0;
+          min-height: 460px;
+        }
+
+        .pe-about-watermark {
+          position: absolute;
+          z-index: -1;
+          top: 50%;
+          left: 50%;
+          width: min(75vw, 850px);
+          height: min(75vw, 850px);
+          display: grid;
+          place-items: center;
+          background: #0e2233;
+          color: #ffffff;
+          border-radius: 12px;
+          border-bottom: 32px solid #e8590c;
           font-family: var(--head);
-          font-size: 84px;
-          line-height: 1;
+          font-size: min(65vw, 690px);
           font-weight: 800;
-          color: #fff;
+          line-height: 1;
+          opacity: .10;
+          filter: blur(22px);
+          transform: translate(-50%, -50%);
+          pointer-events: none;
+          animation: pe-watermark 10s ease-in-out infinite;
         }
 
-        .pe-about-visual span {
-          color: #e7b69a;
-          font-weight: 500;
+        .pe-about-text {
+          position: relative;
+          z-index: 1;
+          max-width: 820px;
+          margin: 0 auto;
+          text-align: center;
+          animation: pe-fade-up 1s .15s ease both;
         }
 
-        .pe-about p {
+        .pe-about-text h2 {
+          font-size: clamp(34px, 4.5vw, 52px);
+          line-height: 1.12;
+          color: var(--steel-900);
+        }
+
+        .pe-about-text p {
+          max-width: 700px;
+          margin: 22px auto 0;
           color: var(--muted);
-          margin-top: 18px;
         }
 
         .pe-checks {
           list-style: none;
           padding: 0;
-          margin: 24px 0 30px;
+          margin: 28px auto 32px;
           display: grid;
-          gap: 12px;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 16px;
+          max-width: 700px;
+          text-align: left;
         }
 
         .pe-checks li {
           display: flex;
+          align-items: flex-start;
           gap: 10px;
           font-weight: 500;
+          transition: transform .25s ease;
+        }
+
+        .pe-checks li:hover {
+          transform: translateX(5px);
         }
 
         .pe-checks svg {
           color: var(--weld);
           flex-shrink: 0;
           margin-top: 3px;
+        }
+
+        .pe-about-text .pe-link {
+          justify-content: center;
         }
 
         /* SERVICES */
@@ -549,14 +751,18 @@ function Home() {
           align-items: center;
           padding: 30px 0;
           border-bottom: 1px solid var(--steel-100);
-          transition: padding .25s ease, background .25s ease;
+          transition: padding .3s ease, background .3s ease;
+          animation: pe-fade-up .8s ease both;
         }
 
+        .pe-service:nth-child(2) { animation-delay: .12s; }
+        .pe-service:nth-child(3) { animation-delay: .24s; }
+
         .pe-service:hover {
-          padding-left: 12px;
+          padding-left: 14px;
           background: linear-gradient(
             90deg,
-            rgba(255,241,232,.65),
+            rgba(255,241,232,.75),
             transparent 75%
           );
         }
@@ -569,22 +775,25 @@ function Home() {
           background: var(--weld-soft);
           color: var(--weld-dark);
           border-radius: 5px;
-          transition:
-            background .25s ease,
-            color .25s ease,
-            transform .25s ease;
+          transition: all .35s ease;
         }
 
         .pe-service:hover .pe-service-icon {
           background: var(--weld);
           color: #fff;
-          transform: rotate(-4deg) scale(1.05);
+          transform: rotate(-7deg) scale(1.1);
+          box-shadow: 0 8px 20px rgba(232,89,12,.22);
         }
 
         .pe-service h3 {
           font-size: 22px;
           font-weight: 700;
           color: var(--steel-900);
+          transition: color .25s ease;
+        }
+
+        .pe-service:hover h3 {
+          color: var(--weld-dark);
         }
 
         .pe-service p {
@@ -602,6 +811,26 @@ function Home() {
             ),
             var(--steel-900);
           color: #fff;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .pe-industries::after {
+          content: "P";
+          position: absolute;
+          right: -25px;
+          bottom: -180px;
+          font-family: var(--head);
+          font-size: 500px;
+          font-weight: 800;
+          line-height: 1;
+          color: rgba(255,255,255,.025);
+          pointer-events: none;
+        }
+
+        .pe-industries .pe-container {
+          position: relative;
+          z-index: 1;
         }
 
         .pe-industries .pe-head h2 {
@@ -627,25 +856,28 @@ function Home() {
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          transition:
-            transform .3s ease,
-            background .3s ease,
-            border-color .3s ease;
+          transition: all .35s ease;
+          animation: pe-card-in .8s ease both;
         }
 
+        .pe-ind:nth-child(2) { animation-delay: .1s; }
+        .pe-ind:nth-child(3) { animation-delay: .2s; }
+        .pe-ind:nth-child(4) { animation-delay: .3s; }
+
         .pe-ind:hover {
-          background: rgba(255,255,255,.09);
+          background: rgba(255,255,255,.1);
           border-color: var(--weld);
-          transform: translateY(-5px);
+          transform: translateY(-9px);
+          box-shadow: 0 15px 35px rgba(0,0,0,.2);
         }
 
         .pe-ind svg {
           color: #f18a50;
-          transition: transform .3s ease;
+          transition: transform .35s ease;
         }
 
         .pe-ind:hover svg {
-          transform: scale(1.12);
+          transform: scale(1.2) rotate(-8deg);
         }
 
         .pe-ind span {
@@ -681,12 +913,14 @@ function Home() {
           font-weight: 700;
           color: var(--steel-600);
           letter-spacing: .4px;
-          transition: background .25s ease, color .25s ease;
+          transition: all .3s ease;
         }
 
         .pe-client:hover {
           background: #fff7f1;
           color: var(--weld-dark);
+          transform: scale(1.04);
+          box-shadow: inset 0 -3px var(--weld);
         }
 
         .pe-client:last-child {
@@ -716,12 +950,12 @@ function Home() {
           border-top: 3px solid var(--steel-100);
           padding-top: 22px;
           position: relative;
-          transition: border-color .25s ease, transform .25s ease;
+          transition: border-color .3s ease, transform .3s ease;
         }
 
         .pe-step:hover {
           border-color: var(--weld);
-          transform: translateY(-4px);
+          transform: translateY(-7px);
         }
 
         .pe-step::before {
@@ -738,6 +972,11 @@ function Home() {
           font-size: 30px;
           color: var(--weld-dark);
           line-height: 1;
+          transition: transform .3s ease;
+        }
+
+        .pe-step:hover::before {
+          transform: translateY(-5px);
         }
 
         .pe-step h3 {
@@ -784,6 +1023,7 @@ function Home() {
           background: rgba(232,89,12,.2);
           filter: blur(75px);
           pointer-events: none;
+          animation: pe-pulse 6s ease-in-out infinite;
         }
 
         .pe-cta-inner {
@@ -834,47 +1074,18 @@ function Home() {
           gap: 8px;
           align-items: center;
           justify-content: center;
-          transition: color .2s ease;
+          transition: color .25s ease, transform .25s ease;
         }
 
         .pe-phone:hover {
           color: #f3a77d;
-        }
-
-        /* ANIMATIONS */
-
-        @keyframes pe-fade-up {
-          from {
-            opacity: 0;
-            transform: translateY(22px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes pe-card-in {
-          from {
-            opacity: 0;
-            transform: translateY(25px) scale(.98);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-          }
-        }
-
-        @keyframes pe-line-in {
-          from { transform: scaleX(0); }
-          to { transform: scaleX(1); }
+          transform: translateY(-3px);
         }
 
         /* RESPONSIVE */
 
         @media (max-width: 960px) {
-          .pe-hero-grid,
-          .pe-about {
+          .pe-hero-grid {
             grid-template-columns: 1fr;
             gap: 44px;
           }
@@ -941,6 +1152,16 @@ function Home() {
             padding: 68px 0;
           }
 
+          .pe-logo-mark {
+            width: 50px;
+            height: 50px;
+            font-size: 32px;
+          }
+
+          .pe-logo-name strong {
+            font-size: 14px;
+          }
+
           .pe-head-row,
           .pe-cta-inner {
             flex-direction: column;
@@ -977,12 +1198,30 @@ function Home() {
             width: 100%;
           }
 
-          .pe-about-visual {
-            min-height: 320px;
+          .pe-about {
+            min-height: 420px;
+            padding: 40px 0;
+          }
+
+          .pe-about-watermark {
+            width: 95vw;
+            height: 95vw;
+            font-size: 82vw;
+            border-bottom-width: 18px;
+            filter: blur(16px);
+          }
+
+          .pe-checks {
+            grid-template-columns: 1fr;
           }
 
           .pe-service {
             gap: 16px;
+          }
+
+          .pe-industries::after {
+            font-size: 300px;
+            bottom: -100px;
           }
         }
 
@@ -1002,7 +1241,20 @@ function Home() {
         {/* HERO */}
         <section className="pe-hero">
           <div className="pe-container pe-hero-grid">
-            <div>
+
+            <div className="pe-hero-copy">
+
+              <div className="pe-logo-area">
+                <div className="pe-logo-mark" aria-label="Prathamesh Enterprises logo">
+                  P
+                </div>
+
+                <div className="pe-logo-name">
+                  <strong>PRATHAMESH ENTERPRISES</strong>
+                  <span>Industrial Fabrication</span>
+                </div>
+              </div>
+
               <div className="pe-hero-tag">
                 Industrial fabrication and engineering
               </div>
@@ -1071,15 +1323,9 @@ function Home() {
         {/* ABOUT */}
         <section className="pe-section">
           <div className="pe-container pe-about">
-            <div
-              className="pe-about-visual"
-              role="img"
-              aria-label="18 years of industry experience"
-            >
-              <div>
-                <strong>18+</strong>
-                <span>years of industry experience</span>
-              </div>
+
+            <div className="pe-about-watermark" aria-hidden="true">
+              P
             </div>
 
             <div className="pe-about-text">
@@ -1240,8 +1486,8 @@ function Home() {
                 Send an enquiry <ArrowUpRight size={18} />
               </Link>
 
-              <a href="tel:+919850587474" className="pe-phone">
-                <Phone size={16} /> +91 98505 87474
+              <a href="tel:+919850987474" className="pe-phone">
+                <Phone size={16} /> 9850987474
               </a>
             </div>
           </div>

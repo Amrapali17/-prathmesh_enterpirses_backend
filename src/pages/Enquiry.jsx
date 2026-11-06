@@ -1,8 +1,6 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  ArrowRight,
   ArrowUpRight,
   CheckCircle2,
   ClipboardList,
@@ -10,7 +8,6 @@ import {
   MessageCircle,
   Phone,
   Mail,
-  Building2,
   Clock3,
   MapPin,
   Send
@@ -19,6 +16,9 @@ import {
 function Enquiry() {
   const [activeForm, setActiveForm] = useState("enquiry");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState("");
+  const [emailSent, setEmailSent] = useState(false);
 
   const [enquiry, setEnquiry] = useState({
     name: "",
@@ -43,83 +43,156 @@ function Enquiry() {
     specifications: ""
   });
 
-  const whatsappNumber = "919850587474";
+  // PHONE NUMBER: ACCEPT ONLY 10 DIGITS
 
   const updateEnquiry = (e) => {
-    setEnquiry({
-      ...enquiry,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+
+    setEnquiry((prev) => ({
+      ...prev,
+      [name]:
+        name === "phone"
+          ? value.replace(/\D/g, "").slice(0, 10)
+          : value
+    }));
   };
 
   const updateQuotation = (e) => {
-    setQuotation({
-      ...quotation,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+
+    setQuotation((prev) => ({
+      ...prev,
+      [name]:
+        name === "phone"
+          ? value.replace(/\D/g, "").slice(0, 10)
+          : value
+    }));
   };
 
-  const sendToWhatsApp = (message) => {
-    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-    window.open(url, "_blank", "noopener,noreferrer");
-    setSubmitted(true);
+  // COMMON API FUNCTION FOR BOTH FORMS
+
+  const sendSubmission = async (payload) => {
+    setSubmitting(true);
+    setSubmitted(false);
+    setSubmitMessage("");
+    setEmailSent(false);
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/inquiries",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(
+          result.message || "Your submission could not be completed."
+        );
+      }
+
+      setSubmitted(true);
+      setEmailSent(result.emailSent === true);
+
+      setSubmitMessage(
+        payload.submission_type === "quotation"
+          ? "Your quotation request has been submitted successfully!"
+          : "Your enquiry has been submitted successfully!"
+      );
+
+      if (payload.submission_type === "enquiry") {
+        setEnquiry({
+          name: "",
+          company: "",
+          email: "",
+          phone: "",
+          requirement: "",
+          message: ""
+        });
+      } else {
+        setQuotation({
+          name: "",
+          company: "",
+          email: "",
+          phone: "",
+          projectType: "",
+          material: "",
+          quantity: "",
+          dimensions: "",
+          location: "",
+          timeline: "",
+          specifications: ""
+        });
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+
+      setSubmitted(false);
+      setSubmitMessage(
+        error.message || "Unable to submit. Please try again."
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
+
+  // GENERAL ENQUIRY SUBMISSION
 
   const submitEnquiry = (e) => {
     e.preventDefault();
 
-    const message = `
-PRATHAMESH ENTERPRISES
-NEW BUSINESS ENQUIRY
+    if (!/^\d{10}$/.test(enquiry.phone)) {
+      setSubmitMessage("Please enter a valid 10-digit phone number.");
+      setSubmitted(false);
+      return;
+    }
 
-Name: ${enquiry.name}
-Company: ${enquiry.company}
-Email: ${enquiry.email}
-Phone: ${enquiry.phone}
-Requirement: ${enquiry.requirement}
-
-Message:
-${enquiry.message}
-
-Sent through the website enquiry form.
-    `;
-
-    sendToWhatsApp(message);
+    sendSubmission({
+      submission_type: "enquiry",
+      full_name: enquiry.name,
+      company_name: enquiry.company,
+      email: enquiry.email,
+      phone: enquiry.phone,
+      service: enquiry.requirement,
+      project_details: {
+        message: enquiry.message
+      }
+    });
   };
+
+  // QUOTATION SUBMISSION
 
   const submitQuotation = (e) => {
     e.preventDefault();
 
-    const message = `
-PRATHAMESH ENTERPRISES
-REQUEST FOR QUOTATION
+    if (!/^\d{10}$/.test(quotation.phone)) {
+      setSubmitMessage("Please enter a valid 10-digit phone number.");
+      setSubmitted(false);
+      return;
+    }
 
-CONTACT DETAILS
-
-Name: ${quotation.name}
-Company: ${quotation.company}
-Email: ${quotation.email}
-Phone: ${quotation.phone}
-
-PROJECT DETAILS
-
-Project Type: ${quotation.projectType}
-Material Preference: ${quotation.material}
-Quantity: ${quotation.quantity}
-Dimensions: ${quotation.dimensions}
-Delivery Location: ${quotation.location}
-Expected Timeline: ${quotation.timeline}
-
-PROJECT SPECIFICATIONS:
-
-${quotation.specifications}
-
-Please review these requirements and share the next steps for a quotation.
-
-Sent through the website quotation form.
-    `;
-
-    sendToWhatsApp(message);
+    sendSubmission({
+      submission_type: "quotation",
+      full_name: quotation.name,
+      company_name: quotation.company,
+      email: quotation.email,
+      phone: quotation.phone,
+      service: quotation.projectType,
+      project_details: {
+        material: quotation.material,
+        quantity: quotation.quantity,
+        dimensions: quotation.dimensions,
+        location: quotation.location,
+        timeline: quotation.timeline,
+        specifications: quotation.specifications
+      }
+    });
   };
 
   return (
@@ -130,39 +203,25 @@ Sent through the website quotation form.
           --orange-dark: #d75c19;
           --orange-light: #fff0e5;
           --navy: #102b3a;
-
           background: #f4f7f8;
           color: #142e3b;
           font-family: Arial, Helvetica, sans-serif;
           overflow: hidden;
         }
 
-        .pe-enquiry-page * {
-          box-sizing: border-box;
-        }
+        .pe-enquiry-page * { box-sizing: border-box; }
 
         .pe-enquiry-container {
           width: min(1160px, calc(100% - 48px));
           margin: auto;
         }
 
-        /* HERO */
-
         .pe-enquiry-hero {
           position: relative;
           overflow: hidden;
           background:
-            radial-gradient(
-              ellipse at 85% 40%,
-              rgba(237, 118, 43, .32),
-              transparent 38%
-            ),
-            linear-gradient(
-              115deg,
-              #101e29 0%,
-              #192c39 60%,
-              #352820 100%
-            );
+            radial-gradient(ellipse at 85% 40%, rgba(237,118,43,.32), transparent 38%),
+            linear-gradient(115deg, #101e29 0%, #192c39 60%, #352820 100%);
           color: white;
           padding: 88px 0 85px;
         }
@@ -175,7 +234,7 @@ Sent through the website quotation form.
           right: -130px;
           top: -180px;
           border-radius: 50%;
-          background: rgba(237, 118, 43, .22);
+          background: rgba(237,118,43,.22);
           filter: blur(80px);
           pointer-events: none;
         }
@@ -211,9 +270,7 @@ Sent through the website quotation form.
           margin: 24px 0;
         }
 
-        .pe-enquiry-hero h1 span {
-          color: var(--orange);
-        }
+        .pe-enquiry-hero h1 span { color: var(--orange); }
 
         .pe-enquiry-hero p {
           max-width: 630px;
@@ -236,11 +293,7 @@ Sent through the website quotation form.
           text-decoration: none;
         }
 
-        /* MAIN SECTION */
-
-        .pe-enquiry-main {
-          padding: 85px 0 100px;
-        }
+        .pe-enquiry-main { padding: 85px 0 100px; }
 
         .pe-enquiry-layout {
           display: grid;
@@ -248,8 +301,6 @@ Sent through the website quotation form.
           gap: 45px;
           align-items: start;
         }
-
-        /* SIDEBAR */
 
         .pe-enquiry-sidebar {
           background: #102b3a;
@@ -309,9 +360,7 @@ Sent through the website quotation form.
           overflow-wrap: anywhere;
         }
 
-        .pe-enquiry-contact-item a:hover {
-          color: var(--orange);
-        }
+        .pe-enquiry-contact-item a:hover { color: var(--orange); }
 
         .pe-enquiry-sidebar-note {
           background: rgba(255,255,255,.06);
@@ -323,15 +372,9 @@ Sent through the website quotation form.
           line-height: 1.8;
         }
 
-        /* FORM AREA */
+        .pe-enquiry-form-area { min-width: 0; }
 
-        .pe-enquiry-form-area {
-          min-width: 0;
-        }
-
-        .pe-enquiry-form-heading {
-          margin-bottom: 27px;
-        }
+        .pe-enquiry-form-heading { margin-bottom: 27px; }
 
         .pe-enquiry-label {
           color: var(--orange-dark);
@@ -354,8 +397,6 @@ Sent through the website quotation form.
           line-height: 1.8;
           margin: 0;
         }
-
-        /* TABS */
 
         .pe-enquiry-tabs {
           display: grid;
@@ -385,18 +426,11 @@ Sent through the website quotation form.
           background: white;
           border-color: #f1c3a3;
           color: #143444;
-          box-shadow: 0 3px 12px rgba(20, 55, 70, .05);
+          box-shadow: 0 3px 12px rgba(20,55,70,.05);
         }
 
-        .pe-enquiry-tab.active svg {
-          color: var(--orange-dark);
-        }
-
-        .pe-enquiry-tab:hover {
-          color: var(--orange-dark);
-        }
-
-        /* FORM */
+        .pe-enquiry-tab.active svg { color: var(--orange-dark); }
+        .pe-enquiry-tab:hover { color: var(--orange-dark); }
 
         .pe-enquiry-form {
           background: white;
@@ -456,9 +490,7 @@ Sent through the website quotation form.
           gap: 9px;
         }
 
-        .pe-enquiry-field.full {
-          grid-column: 1 / -1;
-        }
+        .pe-enquiry-field.full { grid-column: 1 / -1; }
 
         .pe-enquiry-field label {
           color: #344f5c;
@@ -466,9 +498,7 @@ Sent through the website quotation form.
           font-weight: 700;
         }
 
-        .pe-enquiry-field label span {
-          color: #d35a5a;
-        }
+        .pe-enquiry-field label span { color: #d35a5a; }
 
         .pe-enquiry-field input,
         .pe-enquiry-field select,
@@ -486,9 +516,7 @@ Sent through the website quotation form.
         }
 
         .pe-enquiry-field input,
-        .pe-enquiry-field select {
-          min-height: 47px;
-        }
+        .pe-enquiry-field select { min-height: 47px; }
 
         .pe-enquiry-field textarea {
           min-height: 125px;
@@ -505,17 +533,13 @@ Sent through the website quotation form.
         }
 
         .pe-enquiry-field input::placeholder,
-        .pe-enquiry-field textarea::placeholder {
-          color: #a5b1b7;
-        }
+        .pe-enquiry-field textarea::placeholder { color: #a5b1b7; }
 
         .pe-enquiry-hint {
           color: #8b999f;
           font-size: 10px;
           line-height: 1.6;
         }
-
-        /* SUBMIT BUTTON */
 
         .pe-enquiry-submit {
           width: 100%;
@@ -535,10 +559,15 @@ Sent through the website quotation form.
           transition: .25s;
         }
 
-        .pe-enquiry-submit:hover {
+        .pe-enquiry-submit:hover:not(:disabled) {
           background: var(--orange-dark);
           transform: translateY(-2px);
           box-shadow: 0 8px 20px rgba(215,92,25,.2);
+        }
+
+        .pe-enquiry-submit:disabled {
+          opacity: .65;
+          cursor: not-allowed;
         }
 
         .pe-enquiry-privacy {
@@ -549,45 +578,47 @@ Sent through the website quotation form.
           margin: 15px 0 0;
         }
 
-        /* SUCCESS MESSAGE */
-
         .pe-enquiry-success {
           display: flex;
           align-items: flex-start;
-          gap: 10px;
-          background: #eaf6ee;
-          color: #24683d;
-          border: 1px solid #cce9d5;
-          padding: 15px;
+          gap: 13px;
+          border: 1px solid;
+          padding: 19px;
           font-size: 12px;
           line-height: 1.7;
           margin-bottom: 20px;
+          animation: peMessageIn .35s ease;
         }
 
         .pe-enquiry-success svg {
           flex-shrink: 0;
-          margin-top: 1px;
+          margin-top: 2px;
         }
 
-        /* BOTTOM CTA - ORANGE GRADIENT */
+        .pe-enquiry-success strong {
+          display: block;
+          font-size: 13px;
+          margin-bottom: 4px;
+        }
+
+        .pe-enquiry-success p {
+          font-size: 12px;
+          line-height: 1.7;
+          margin: 6px 0 0;
+        }
+
+        @keyframes peMessageIn {
+          from { opacity: 0; transform: translateY(8px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
 
         .pe-enquiry-bottom {
           position: relative;
           overflow: hidden;
           padding: 75px 0;
           background:
-            radial-gradient(
-              ellipse at 90% 50%,
-              rgba(237,118,43,.4) 0%,
-              rgba(237,118,43,.17) 30%,
-              transparent 62%
-            ),
-            linear-gradient(
-              115deg,
-              #0b202c 0%,
-              #172d3a 55%,
-              #3b2a25 100%
-            );
+            radial-gradient(ellipse at 90% 50%, rgba(237,118,43,.4) 0%, rgba(237,118,43,.17) 30%, transparent 62%),
+            linear-gradient(115deg, #0b202c 0%, #172d3a 55%, #3b2a25 100%);
         }
 
         .pe-enquiry-bottom::before {
@@ -645,49 +676,25 @@ Sent through the website quotation form.
           transform: translateY(-2px);
         }
 
-        /* RESPONSIVE */
-
         @media(max-width: 900px) {
           .pe-enquiry-layout {
             grid-template-columns: 260px minmax(0, 1fr);
             gap: 25px;
           }
-
-          .pe-enquiry-form {
-            padding: 25px;
-          }
+          .pe-enquiry-form { padding: 25px; }
         }
 
         @media(max-width: 700px) {
-          .pe-enquiry-container {
-            width: calc(100% - 36px);
-          }
-
-          .pe-enquiry-hero {
-            padding: 75px 0;
-          }
-
-          .pe-enquiry-hero h1 {
-            letter-spacing: -1.8px;
-          }
-
-          .pe-enquiry-main {
-            padding: 55px 0 70px;
-          }
-
-          .pe-enquiry-layout {
-            grid-template-columns: 1fr;
-          }
-
-          .pe-enquiry-sidebar {
-            position: static;
-          }
-
+          .pe-enquiry-container { width: calc(100% - 36px); }
+          .pe-enquiry-hero { padding: 75px 0; }
+          .pe-enquiry-hero h1 { letter-spacing: -1.8px; }
+          .pe-enquiry-main { padding: 55px 0 70px; }
+          .pe-enquiry-layout { grid-template-columns: 1fr; }
+          .pe-enquiry-sidebar { position: static; }
           .pe-enquiry-bottom-inner {
             flex-direction: column;
             align-items: flex-start;
           }
-
           .pe-enquiry-bottom-link {
             width: 100%;
             justify-content: center;
@@ -695,18 +702,9 @@ Sent through the website quotation form.
         }
 
         @media(max-width: 480px) {
-          .pe-enquiry-fields {
-            grid-template-columns: 1fr;
-          }
-
-          .pe-enquiry-field.full {
-            grid-column: auto;
-          }
-
-          .pe-enquiry-form {
-            padding: 20px 16px;
-          }
-
+          .pe-enquiry-fields { grid-template-columns: 1fr; }
+          .pe-enquiry-field.full { grid-column: auto; }
+          .pe-enquiry-form { padding: 20px 16px; }
           .pe-enquiry-tab {
             flex-direction: column;
             font-size: 10px;
@@ -719,6 +717,7 @@ Sent through the website quotation form.
           .pe-enquiry-page *::before,
           .pe-enquiry-page *::after {
             transition: none !important;
+            animation: none !important;
           }
         }
       `}</style>
@@ -729,7 +728,6 @@ Sent through the website quotation form.
 
         <section className="pe-enquiry-hero">
           <div className="pe-enquiry-container">
-
             <span className="pe-enquiry-eyebrow">
               Let's Work Together
             </span>
@@ -752,7 +750,6 @@ Sent through the website quotation form.
               <span>/</span>
               <span>Enquiry & Quotation</span>
             </div>
-
           </div>
         </section>
 
@@ -765,9 +762,7 @@ Sent through the website quotation form.
               {/* CONTACT SIDEBAR */}
 
               <aside className="pe-enquiry-sidebar">
-                <h2>
-                  Let's start a conversation.
-                </h2>
+                <h2>Let's start a conversation.</h2>
 
                 <p>
                   Connect with Prathamesh Enterprises
@@ -779,10 +774,9 @@ Sent through the website quotation form.
                   <div className="pe-enquiry-contact-icon">
                     <Phone size={17} />
                   </div>
-
                   <div>
                     <span>Call Us</span>
-                    <a href="tel:+919850587474">
+                    <a href="tel:+919850987474">
                       +91 98505 87474
                     </a>
                   </div>
@@ -792,11 +786,10 @@ Sent through the website quotation form.
                   <div className="pe-enquiry-contact-icon">
                     <Mail size={17} />
                   </div>
-
                   <div>
                     <span>Email Us</span>
-                    <a href="mailto:Prathmeshshelar356@gmail.com">
-                      Prathmeshshelar356@gmail.com
+                    <a href="mailto:prathmeshshshelar356@gmail.com">
+                      prathmeshshshelar356@gmail.com
                     </a>
                   </div>
                 </div>
@@ -805,7 +798,6 @@ Sent through the website quotation form.
                   <div className="pe-enquiry-contact-icon">
                     <Clock3 size={17} />
                   </div>
-
                   <div>
                     <span>Experience</span>
                     <strong>18 Years in Business</strong>
@@ -816,7 +808,6 @@ Sent through the website quotation form.
                   <div className="pe-enquiry-contact-icon">
                     <MapPin size={17} />
                   </div>
-
                   <div>
                     <span>Location</span>
                     <strong>Contact us for our business address</strong>
@@ -834,16 +825,9 @@ Sent through the website quotation form.
               {/* FORMS */}
 
               <div className="pe-enquiry-form-area">
-
                 <div className="pe-enquiry-form-heading">
-                  <span className="pe-enquiry-label">
-                    Get In Touch
-                  </span>
-
-                  <h2>
-                    How can we help you?
-                  </h2>
-
+                  <span className="pe-enquiry-label">Get In Touch</span>
+                  <h2>How can we help you?</h2>
                   <p>
                     Select the form that best matches your
                     requirement. Fields marked with * are required.
@@ -859,6 +843,8 @@ Sent through the website quotation form.
                     onClick={() => {
                       setActiveForm("enquiry");
                       setSubmitted(false);
+                      setSubmitMessage("");
+                      setEmailSent(false);
                     }}
                   >
                     <MessageCircle size={17} />
@@ -871,6 +857,8 @@ Sent through the website quotation form.
                     onClick={() => {
                       setActiveForm("quotation");
                       setSubmitted(false);
+                      setSubmitMessage("");
+                      setEmailSent(false);
                     }}
                   >
                     <FileText size={17} />
@@ -878,14 +866,40 @@ Sent through the website quotation form.
                   </button>
                 </div>
 
-                {submitted && (
-                  <div className="pe-enquiry-success">
-                    <CheckCircle2 size={19} />
-                    <span>
-                      Your WhatsApp message has been prepared.
-                      Please send it in the WhatsApp window to
-                      complete your submission.
-                    </span>
+                {/* SUCCESS / ERROR MESSAGE */}
+
+                {submitMessage && (
+                  <div
+                    className="pe-enquiry-success"
+                    role="status"
+                    aria-live="polite"
+                    style={{
+                      background: submitted ? "#eaf6ee" : "#fff0ed",
+                      color: submitted ? "#24683d" : "#a12b20",
+                      borderColor: submitted ? "#cce9d5" : "#f2c9c3"
+                    }}
+                  >
+                    {submitted ? (
+                      <CheckCircle2 size={24} />
+                    ) : (
+                      <span>!</span>
+                    )}
+
+                    <div>
+                      <strong>
+                        {submitted
+                          ? "Thank you for contacting Prathamesh Enterprises!"
+                          : "Submission unsuccessful"}
+                      </strong>
+
+                      <p>
+                        {submitted
+                          ? emailSent
+                            ? "Your details have been received successfully. Our team will review your requirement and get back to you shortly."
+                            : "Your details have been saved successfully. Our team will review your requirement and get back to you shortly. However, our email notification could not be sent."
+                          : submitMessage}
+                      </p>
+                    </div>
                   </div>
                 )}
 
@@ -900,12 +914,9 @@ Sent through the website quotation form.
                       <div className="pe-enquiry-form-title-icon">
                         <MessageCircle size={20} />
                       </div>
-
                       <div>
                         <h3>General Business Enquiry</h3>
-                        <p>
-                          Tell us a little about your requirement.
-                        </p>
+                        <p>Tell us a little about your requirement.</p>
                       </div>
                     </div>
 
@@ -914,11 +925,8 @@ Sent through the website quotation form.
                     </div>
 
                     <div className="pe-enquiry-fields">
-
                       <div className="pe-enquiry-field">
-                        <label>
-                          Full Name <span>*</span>
-                        </label>
+                        <label>Full Name <span>*</span></label>
                         <input
                           type="text"
                           name="name"
@@ -941,9 +949,7 @@ Sent through the website quotation form.
                       </div>
 
                       <div className="pe-enquiry-field">
-                        <label>
-                          Business Email <span>*</span>
-                        </label>
+                        <label>Business Email <span>*</span></label>
                         <input
                           type="email"
                           name="email"
@@ -955,19 +961,24 @@ Sent through the website quotation form.
                       </div>
 
                       <div className="pe-enquiry-field">
-                        <label>
-                          Phone Number <span>*</span>
-                        </label>
+                        <label>Phone Number <span>*</span></label>
                         <input
                           type="tel"
                           name="phone"
-                          placeholder="Enter contact number"
+                          placeholder="Enter 10-digit phone number"
                           value={enquiry.phone}
                           onChange={updateEnquiry}
+                          inputMode="numeric"
+                          pattern="[0-9]{10}"
+                          minLength={10}
+                          maxLength={10}
+                          title="Please enter exactly 10 digits"
                           required
                         />
+                        <span className="pe-enquiry-hint">
+                          Enter exactly 10 digits.
+                        </span>
                       </div>
-
                     </div>
 
                     <div className="pe-enquiry-section-title">
@@ -975,44 +986,25 @@ Sent through the website quotation form.
                     </div>
 
                     <div className="pe-enquiry-fields">
-
                       <div className="pe-enquiry-field full">
-                        <label>
-                          Type of Requirement <span>*</span>
-                        </label>
-
+                        <label>Type of Requirement <span>*</span></label>
                         <select
                           name="requirement"
                           value={enquiry.requirement}
                           onChange={updateEnquiry}
                           required
                         >
-                          <option value="">
-                            Select your requirement
-                          </option>
-                          <option value="Industrial fabrication">
-                            Industrial fabrication
-                          </option>
-                          <option value="Custom fabrication">
-                            Custom fabrication
-                          </option>
-                          <option value="New project discussion">
-                            New project discussion
-                          </option>
-                          <option value="Vendor or business enquiry">
-                            Vendor or business enquiry
-                          </option>
-                          <option value="Other">
-                            Other
-                          </option>
+                          <option value="">Select your requirement</option>
+                          <option value="Industrial fabrication">Industrial fabrication</option>
+                          <option value="Custom fabrication">Custom fabrication</option>
+                          <option value="New project discussion">New project discussion</option>
+                          <option value="Vendor or business enquiry">Vendor or business enquiry</option>
+                          <option value="Other">Other</option>
                         </select>
                       </div>
 
                       <div className="pe-enquiry-field full">
-                        <label>
-                          Message <span>*</span>
-                        </label>
-
+                        <label>Message <span>*</span></label>
                         <textarea
                           name="message"
                           placeholder="Describe your requirement, project or business enquiry..."
@@ -1021,20 +1013,20 @@ Sent through the website quotation form.
                           required
                         />
                       </div>
-
                     </div>
 
                     <button
                       type="submit"
                       className="pe-enquiry-submit"
+                      disabled={submitting}
                     >
-                      SEND ENQUIRY ON WHATSAPP
+                      {submitting ? "SENDING ENQUIRY..." : "SUBMIT ENQUIRY"}
                       <Send size={17} />
                     </button>
 
                     <p className="pe-enquiry-privacy">
-                      Your details will be included in a WhatsApp
-                      message addressed to Prathamesh Enterprises.
+                      Your enquiry will be securely submitted
+                      to Prathamesh Enterprises.
                     </p>
                   </form>
                 )}
@@ -1050,12 +1042,9 @@ Sent through the website quotation form.
                       <div className="pe-enquiry-form-title-icon">
                         <ClipboardList size={20} />
                       </div>
-
                       <div>
                         <h3>Request a Quotation</h3>
-                        <p>
-                          Share your project details for quotation review.
-                        </p>
+                        <p>Share your project details for quotation review.</p>
                       </div>
                     </div>
 
@@ -1064,11 +1053,8 @@ Sent through the website quotation form.
                     </div>
 
                     <div className="pe-enquiry-fields">
-
                       <div className="pe-enquiry-field">
-                        <label>
-                          Full Name <span>*</span>
-                        </label>
+                        <label>Full Name <span>*</span></label>
                         <input
                           type="text"
                           name="name"
@@ -1080,9 +1066,7 @@ Sent through the website quotation form.
                       </div>
 
                       <div className="pe-enquiry-field">
-                        <label>
-                          Company Name <span>*</span>
-                        </label>
+                        <label>Company Name <span>*</span></label>
                         <input
                           type="text"
                           name="company"
@@ -1094,9 +1078,7 @@ Sent through the website quotation form.
                       </div>
 
                       <div className="pe-enquiry-field">
-                        <label>
-                          Business Email <span>*</span>
-                        </label>
+                        <label>Business Email <span>*</span></label>
                         <input
                           type="email"
                           name="email"
@@ -1108,19 +1090,24 @@ Sent through the website quotation form.
                       </div>
 
                       <div className="pe-enquiry-field">
-                        <label>
-                          Phone Number <span>*</span>
-                        </label>
+                        <label>Phone Number <span>*</span></label>
                         <input
                           type="tel"
                           name="phone"
-                          placeholder="Contact number"
+                          placeholder="Enter 10-digit phone number"
                           value={quotation.phone}
                           onChange={updateQuotation}
+                          inputMode="numeric"
+                          pattern="[0-9]{10}"
+                          minLength={10}
+                          maxLength={10}
+                          title="Please enter exactly 10 digits"
                           required
                         />
+                        <span className="pe-enquiry-hint">
+                          Enter exactly 10 digits.
+                        </span>
                       </div>
-
                     </div>
 
                     <div className="pe-enquiry-section-title">
@@ -1128,61 +1115,35 @@ Sent through the website quotation form.
                     </div>
 
                     <div className="pe-enquiry-fields">
-
                       <div className="pe-enquiry-field">
-                        <label>
-                          Project Type <span>*</span>
-                        </label>
-
+                        <label>Project Type <span>*</span></label>
                         <select
                           name="projectType"
                           value={quotation.projectType}
                           onChange={updateQuotation}
                           required
                         >
-                          <option value="">
-                            Select project type
-                          </option>
-                          <option value="Industrial fabrication">
-                            Industrial fabrication
-                          </option>
-                          <option value="Custom fabrication">
-                            Custom fabrication
-                          </option>
-                          <option value="Fabrication components">
-                            Fabrication components
-                          </option>
-                          <option value="Other / To be discussed">
-                            Other / To be discussed
-                          </option>
+                          <option value="">Select project type</option>
+                          <option value="Industrial fabrication">Industrial fabrication</option>
+                          <option value="Custom fabrication">Custom fabrication</option>
+                          <option value="Fabrication components">Fabrication components</option>
+                          <option value="Other / To be discussed">Other / To be discussed</option>
                         </select>
                       </div>
 
                       <div className="pe-enquiry-field">
                         <label>Material Preference</label>
-
                         <select
                           name="material"
                           value={quotation.material}
                           onChange={updateQuotation}
                         >
-                          <option value="">
-                            Select if known
-                          </option>
-                          <option value="Stainless steel">
-                            Stainless steel
-                          </option>
-                          <option value="Mild steel">
-                            Mild steel
-                          </option>
-                          <option value="Other material">
-                            Other material
-                          </option>
-                          <option value="Need technical guidance">
-                            Need technical guidance
-                          </option>
+                          <option value="">Select if known</option>
+                          <option value="Stainless steel">Stainless steel</option>
+                          <option value="Mild steel">Mild steel</option>
+                          <option value="Other material">Other material</option>
+                          <option value="Need technical guidance">Need technical guidance</option>
                         </select>
-
                         <span className="pe-enquiry-hint">
                           Material options must be confirmed against
                           the company's actual capabilities.
@@ -1224,30 +1185,17 @@ Sent through the website quotation form.
 
                       <div className="pe-enquiry-field">
                         <label>Expected Timeline</label>
-
                         <select
                           name="timeline"
                           value={quotation.timeline}
                           onChange={updateQuotation}
                         >
-                          <option value="">
-                            Select expected timeline
-                          </option>
-                          <option value="Urgent">
-                            Urgent
-                          </option>
-                          <option value="Within 2 weeks">
-                            Within 2 weeks
-                          </option>
-                          <option value="Within 1 month">
-                            Within 1 month
-                          </option>
-                          <option value="Within 2–3 months">
-                            Within 2–3 months
-                          </option>
-                          <option value="Flexible">
-                            Flexible
-                          </option>
+                          <option value="">Select expected timeline</option>
+                          <option value="Urgent">Urgent</option>
+                          <option value="Within 2 weeks">Within 2 weeks</option>
+                          <option value="Within 1 month">Within 1 month</option>
+                          <option value="Within 2–3 months">Within 2–3 months</option>
+                          <option value="Flexible">Flexible</option>
                         </select>
                       </div>
 
@@ -1256,7 +1204,6 @@ Sent through the website quotation form.
                           Technical Specifications / Project Details
                           <span> *</span>
                         </label>
-
                         <textarea
                           name="specifications"
                           placeholder="Describe the work, technical specifications, drawing references, material grade, operating conditions or any other important details..."
@@ -1264,20 +1211,21 @@ Sent through the website quotation form.
                           onChange={updateQuotation}
                           required
                         />
-
                         <span className="pe-enquiry-hint">
                           You can share technical drawings or reference
                           documents separately through WhatsApp or email.
                         </span>
                       </div>
-
                     </div>
 
                     <button
                       type="submit"
                       className="pe-enquiry-submit"
+                      disabled={submitting}
                     >
-                      SEND QUOTATION REQUEST
+                      {submitting
+                        ? "SENDING REQUEST..."
+                        : "SUBMIT QUOTATION REQUEST"}
                       <ArrowUpRight size={17} />
                     </button>
 
@@ -1288,7 +1236,6 @@ Sent through the website quotation form.
                     </p>
                   </form>
                 )}
-
               </div>
             </div>
           </div>
@@ -1299,7 +1246,6 @@ Sent through the website quotation form.
         <section className="pe-enquiry-bottom">
           <div className="pe-enquiry-container">
             <div className="pe-enquiry-bottom-inner">
-
               <div>
                 <h2>Prefer speaking directly?</h2>
                 <p>
@@ -1309,7 +1255,7 @@ Sent through the website quotation form.
               </div>
 
               <a
-                href="https://wa.me/919850587474"
+                href="https://wa.me/919850987474"
                 target="_blank"
                 rel="noreferrer"
                 className="pe-enquiry-bottom-link"
@@ -1317,11 +1263,9 @@ Sent through the website quotation form.
                 CHAT ON WHATSAPP
                 <ArrowUpRight size={16} />
               </a>
-
             </div>
           </div>
         </section>
-
       </main>
     </>
   );

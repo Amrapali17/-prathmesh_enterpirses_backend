@@ -23,8 +23,8 @@ const PHOTOS = {
 
   gallery: [
     {
-      src: "https://www.hoekman-rvs.nl/photos/800x533/a8173b-hoekman-rvs-lassen1-1000px-2024.webp",
-      alt: "Precision TIG welding of stainless steel components",
+      src: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1200&q=85",
+      alt: "Precision welding and industrial metal fabrication",
       caption: "Stainless Steel Welding"
     },
     {
@@ -48,8 +48,8 @@ const PHOTOS = {
       caption: "Metal Assembly & Welding"
     },
     {
-      src: "https://www.voka.be/sites/default/files/styles/1920_width/public/images/Nieuws/West-Vlaanderen/2024/april/KDS_Stumaco_Blikvanger_Staden_230424_5.jpg?itok=pn8nz7M6",
-      alt: "Industrial steel frame fabrication",
+      src: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1200&q=85",
+      alt: "Industrial engineering and metal fabrication work",
       caption: "Industrial Metal Structures"
     }
   ]
