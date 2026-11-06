@@ -3,7 +3,6 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
-const nodemailer = require("nodemailer");
 const { createClient } = require("@supabase/supabase-js");
 
 const app = express();
@@ -20,14 +19,6 @@ const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
-
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
 
 // Escape HTML characters for safe email formatting
 const escapeHtml = (value) => {
@@ -83,6 +74,18 @@ app.post("/api/inquiries", async (req, res) => {
       return res.status(400).json({
         success: false,
         message: "Please provide valid required details."
+      });
+    }
+
+    if (
+      !process.env.RESEND_API_KEY ||
+      !process.env.BUSINESS_EMAIL
+    ) {
+      console.error("Missing Resend or business email configuration.");
+
+      return res.status(500).json({
+        success: false,
+        message: "Server email configuration is incomplete."
       });
     }
 
@@ -263,16 +266,36 @@ Website Enquiry Notification
       </div>
     `;
 
-    // 5. Send email notification
+    // 5. Send email notification using Resend
     try {
-      await transporter.sendMail({
-        from: `"Prathamesh Enterprises Website" <${process.env.EMAIL_USER}>`,
-        to: process.env.BUSINESS_EMAIL,
-        replyTo: data.email,
-        subject: `New ${data.submission_type} - Prathamesh Enterprises`,
-        text: emailText,
-        html: emailHtml
-      });
+      const resendResponse = await fetch(
+        "https://api.resend.com/emails",
+        {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${process.env.RESEND_API_KEY}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            from: "Prathamesh Enterprises <website@prathameshenterprises.co.in>",
+            to: [process.env.BUSINESS_EMAIL],
+            reply_to: data.email.trim(),
+            subject: `New ${data.submission_type} - Prathamesh Enterprises`,
+            text: emailText,
+            html: emailHtml
+          })
+        }
+      );
+
+      const resendResult = await resendResponse.json();
+
+      if (!resendResponse.ok) {
+        throw new Error(
+          resendResult.message || "Resend email delivery failed."
+        );
+      }
+
+      console.log("Resend email accepted:", resendResult.id);
 
       return res.json({
         success: true,
@@ -281,7 +304,7 @@ Website Enquiry Notification
       });
 
     } catch (emailError) {
-      console.error("Email error:", emailError);
+      console.error("Resend email error:", emailError);
 
       return res.status(200).json({
         success: true,
